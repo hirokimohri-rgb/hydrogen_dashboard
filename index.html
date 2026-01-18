@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水素投資トレンド分析 2021-2025</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    }
+    
+    header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    
+    header p {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      padding: 10px 24px;
+      border: none;
+      background: #fff;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+      font-family: inherit;
+    }
+    
+    .tab:hover {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+    
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .stat-card .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    
+    .stat-card .value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    
+    .stat-card .sub {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    
+    .charts-grid-half {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    
+    @media (max-width: 900px) {
+      .charts-grid, .charts-grid-half { grid-template-columns: 1fr; }
+    }
+    
+    .chart-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .chart-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    
+    .chart-card .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 280px;
+    }
+    
+    .chart-container-sm {
+      position: relative;
+      height: 240px;
+    }
+    
+    .insight-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #0ea5e9;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .insight-card .icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .insight-card .title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0ea5e9;
+      margin-bottom: 8px;
+    }
+    
+    .insight-card .content {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.7;
+    }
+    
+    .growth-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 800px) {
+      .growth-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    .growth-item {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .growth-item .number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #059669;
+    }
+    
+    .growth-item .name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f172a;
+      margin-top: 8px;
+    }
+    
+    .growth-item .detail {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    
+    .region-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 800px) {
+      .region-grid { grid-template-columns: 1fr; }
+    }
+    
+    .region-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .region-card .flag {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .region-card .stats {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    
+    .region-card .desc {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 700px) {
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+    
+    .summary-col h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .summary-col.up h4 { color: #059669; }
+    .summary-col.down h4 { color: #dc2626; }
+    
+    .summary-col ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .summary-col li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #475569;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .summary-col li:last-child {
+      border-bottom: none;
+    }
+    
+    footer {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">⚡</div>
+      <div>
+        <h1>水素投資トレンド分析</h1>
+        <p>2021-2025年 スタートアップ投資データ（294件）</p>
+      </div>
+    </header>
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="overview">概要</button>
+      <button class="tab" data-tab="sectors">セクター分析</button>
+      <button class="tab" data-tab="geography">地域分析</button>
+      <button class="tab" data-tab="insights">インサイト</button>
+    </div>
+    
+    <div id="overview" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="label">総投資額</div>
+          <div class="value">$6.7B</div>
+          <div class="sub">2021-2025年累計</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">総投資件数</div>
+          <div class="value">294</div>
+          <div class="sub">ユニーク企業: 200+</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">平均ディール</div>
+          <div class="value">$28.9M</div>
+          <div class="sub">2023年ピーク: $37.7M</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">参加国数</div>
+          <div class="value">29</div>
+          <div class="sub">米国が最大シェア</div>
+        </div>
+      </div>
+      
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>年別投資推移</h3>
+          <p class="subtitle">投資額（百万ドル）と件数</p>
+          <div class="chart-container">
+            <canvas id="yearlyChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>セクター別投資額</h3>
+          <p class="subtitle">単位: 百万ドル</p>
+          <div class="chart-container">
+            <canvas id="sectorPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <h3>投資ステージ推移</h3>
+        <p class="subtitle">年別の投資ラウンド構成（件数）</p>
+        <div class="chart-container">
+          <canvas id="stageChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <div id="sectors" class="tab-content">
+      <div class="charts-grid-half">
+        <div class="chart-card">
+          <h3>電解槽技術タイプ別投資</h3>
+          <p class="subtitle">製造技術別の投資額（百万ドル）</p>
+          <div class="chart-container">
+            <canvas id="electrolysisChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>セクター構成比の変化</h3>
+          <p class="subtitle">年別の投資配分（%）</p>
+          <div class="chart-container">
+            <canvas id="sectorTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <h3>新興技術の成長</h3>
+        <p class="subtitle">2021-22年 vs 2024-25年の投資件数変化</p>
+        <div class="growth-grid">
+          <div class="growth-item">
+            <div class="number">+6</div>
+            <div class="name">天然水素抽出</div>
+            <div class="detail">0件 → 6件</div>
+          </div>
+          <div class="growth-item">
+            <div class="number">+2</div>
+            <div class="name">液体水素キャリア</div>
+            <div class="detail">1件 → 3件</div>
+          </div>
+          <div class="growth-item">
+            <div class="number">+1</div>
+            <div class="name">熱分解</div>
+            <div class="detail">0件 → 1件</div>
+          </div>
+          <div class="growth-item">
+            <div class="number">+1</div>
+            <div class="name">固体水素キャリア</div>
+            <div class="detail">2件 → 3件</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="geography" class="tab-content">
+      <div class="charts-grid-half">
+        <div class="chart-card">
+          <h3>国別投資額</h3>
+          <p class="subtitle">上位8カ国（百万ドル）</p>
+          <div class="chart-container">
+            <canvas id="countryChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>主要投資家</h3>
+          <p class="subtitle">投資件数ランキング</p>
+          <div class="chart-container">
+            <canvas id="investorChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <h3>地域別特徴</h3>
+        <div class="region-grid">
+          <div class="region-card">
+            <div class="flag">🇺🇸 米国</div>
+            <div class="stats">$3.1B / 116件</div>
+            <div class="desc">電解槽・メタン熱分解・アンモニアなど全分野をカバー。大型Growth Equityが多い</div>
+          </div>
+          <div class="region-card">
+            <div class="flag">🇩🇪 ドイツ</div>
+            <div class="stats">$896M / 19件</div>
+            <div class="desc">固体酸化物電解槽(SOEC)とLOHC貯蔵技術に強み。Sunfire等の大型企業</div>
+          </div>
+          <div class="region-card">
+            <div class="flag">🇨🇳 中国</div>
+            <div class="stats">$637M / 27件</div>
+            <div class="desc">固体水素貯蔵・燃料電池応用に注力。件数対比で小規模投資が多い</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="insights" class="tab-content">
+      <div class="insight-card">
+        <div class="icon">📈</div>
+        <div class="title">市場成熟化の兆候</div>
+        <div class="content">2022-23年をピークに投資件数・金額ともに減少傾向。平均ディールサイズは2023年の$37.7Mから2025年は$18.5Mに低下。初期の熱狂が収束し、選別投資フェーズに移行中。</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="icon">🏭</div>
+        <div class="title">Production（製造）への集中加速</div>
+        <div class="content">製造セクターへの投資比率が2021年の69.5%から2025年は83.5%に上昇。特に電解槽技術が全体の4割以上を占める。一方、Distribution（流通）への投資は13.6%→0%に急減。</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="icon">⚡</div>
+        <div class="title">電解槽技術の競争激化</div>
+        <div class="content">PEM電解槽が約10億ドルで最大投資を集めるが、固体酸化物電解槽(SOEC)が2024年に急成長（年間2.8億ドル）。高効率・高温運転のSOECが次世代技術として注目。AEM電解槽も件数では健闘。</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="icon">🌍</div>
+        <div class="title">天然水素（地下水素）の急浮上</div>
+        <div class="content">2023年以前はゼロだった天然水素抽出技術が2024-25年に6件の投資を獲得。Koloma社が$245Mを調達するなど、新たな水素源として期待。製造コスト大幅削減の可能性。</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="icon">🔋</div>
+        <div class="title">アンモニア経済の進展</div>
+        <div class="content">水素キャリアとしてのアンモニアへの投資が継続。Amogy社は累計$220M以上を調達し、船舶用燃料電池などの実用化を推進。グリーンアンモニア製造＋利用の両面で投資。</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="icon">💰</div>
+        <div class="title">投資家の二極化</div>
+        <div class="content">AP Ventures(21件)、Breakthrough Energy Ventures(17件)がリード。石油メジャー系（Aramco、Chevron、Shell）と産業系（三菱重工、Baker Hughes）が積極参入。戦略投資家の比重増加。</div>
+      </div>
+      
+      <div class="chart-card" style="margin-top: 24px;">
+        <h3>5年間の主要トレンドまとめ</h3>
+        <div class="summary-grid">
+          <div class="summary-col up">
+            <h4>📈 増加傾向</h4>
+            <ul>
+              <li>製造セクター全体（特に電解槽）</li>
+              <li>固体酸化物電解槽(SOEC)技術</li>
+              <li>天然水素抽出技術</li>
+              <li>Growth Equity比率の上昇</li>
+              <li>ヨーロッパ（ベルギー、エストニア等）の台頭</li>
+            </ul>
+          </div>
+          <div class="summary-col down">
+            <h4>📉 減少傾向</h4>
+            <ul>
+              <li>全体の投資件数・金額（2023年ピーク後）</li>
+              <li>Distribution（流通・給油所）</li>
+              <li>メタン熱分解（2022年がピーク）</li>
+              <li>Series B ラウンド件数</li>
+              <li>早期段階（Seed）の割合</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      *2025年データは途中経過（Q4まで） | データソース: 水素スタートアップ投資データベース（294件）
+    </footer>
+  </div>
+  
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+    
+    Chart.defaults.font.family = "'Noto Sans JP', sans-serif";
+    Chart.defaults.color = '#64748b';
+    
+    new Chart(document.getElementById('yearlyChart'), {
+      type: 'bar',
+      data: {
+        labels: ['2021', '2022', '2023', '2024', '2025*'],
+        datasets: [
+          {
+            label: '投資額 (M$)',
+            data: [1023, 1849, 1849, 1408, 574],
+            backgroundColor: '#0ea5e9',
+            borderRadius: 6,
+            yAxisID: 'y'
+          },
+          {
+            label: '件数',
+            data: [59, 79, 62, 54, 40],
+            type: 'line',
+            borderColor: '#f59e0b',
+            backgroundColor: '#f59e0b',
+            borderWidth: 3,
+            pointRadius: 5,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: { position: 'left', title: { display: true, text: '投資額 (M$)' } },
+          y1: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '件数' } }
+        }
+      }
+    });
+    
+    new Chart(document.getElementById('sectorPieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Production', 'Applications', 'Services', 'Distribution', 'Storage'],
+        datasets: [{
+          data: [4954, 513, 415, 335, 246],
+          backgroundColor: ['#0ea5e9', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right' }
+        }
+      }
+    });
+    
+    new Chart(document.getElementById('stageChart'), {
+      type: 'bar',
+      data: {
+        labels: ['2021', '2022', '2023', '2024', '2025*'],
+        datasets: [
+          { label: 'Seed', data: [29, 32, 24, 23, 16], backgroundColor: '#10b981' },
+          { label: 'Series A', data: [18, 19, 15, 14, 12], backgroundColor: '#0ea5e9' },
+          { label: 'Series B', data: [2, 10, 10, 5, 1], backgroundColor: '#8b5cf6' },
+          { label: 'Growth', data: [10, 18, 13, 12, 11], backgroundColor: '#f59e0b' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { x: { stacked: true }, y: { stacked: true } }
+      }
+    });
+    
+    new Chart(document.getElementById('electrolysisChart'), {
+      type: 'bar',
+      data: {
+        labels: ['PEM', 'Solid Oxide', 'Alkaline', 'Capillary-fed', 'AEM', 'Multi-stage'],
+        datasets: [{
+          label: '投資額 (M$)',
+          data: [996, 578, 484, 146, 140, 107],
+          backgroundColor: ['#0ea5e9', '#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+    
+    new Chart(document.getElementById('sectorTrendChart'), {
+      type: 'line',
+      data: {
+        labels: ['2021', '2022', '2023', '2024', '2025*'],
+        datasets: [
+          { label: 'Production', data: [69.5, 68.6, 67.9, 79.7, 83.5], borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.1)', fill: true, tension: 0.3 },
+          { label: 'Distribution', data: [13.6, 5.6, 6.6, 0.5, 0], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 },
+          { label: 'Applications', data: [5.9, 8.2, 12.6, 1.5, 5.3], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', fill: true, tension: 0.3 },
+          { label: 'Storage', data: [10.7, 1.9, 2.0, 4.6, 4.3], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, tension: 0.3 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { title: { display: true, text: '構成比 (%)' } } }
+      }
+    });
+    
+    new Chart(document.getElementById('countryChart'), {
+      type: 'bar',
+      data: {
+        labels: ['US', 'Germany', 'China', 'Belgium', 'France', 'UK', 'Estonia', 'Australia'],
+        datasets: [{
+          label: '投資額 (M$)',
+          data: [3143, 896, 637, 392, 335, 263, 170, 165],
+          backgroundColor: '#6366f1',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+    
+    new Chart(document.getElementById('investorChart'), {
+      type: 'bar',
+      data: {
+        labels: ['AP Ventures', 'Breakthrough Energy', 'Mitsubishi HI', 'Temasek', 'Climate Pledge', 'Aramco', 'Baker Hughes', 'Chevron'],
+        datasets: [{
+          label: '投資件数',
+          data: [21, 17, 10, 9, 8, 7, 7, 6],
+          backgroundColor: '#f59e0b',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+  </script>
+</body>
+</html>
