@@ -8,33 +8,108 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+    body { font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
     .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
     header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e2e8f0; }
     .logo { width: 56px; height: 56px; background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
     header h1 { font-size: 26px; font-weight: 700; color: #0f172a; }
+    header p { color: #64748b; font-size: 14px; margin-top: 2px; }
     .tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-    .tab { padding: 10px 24px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-    .tab.active { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); color: #fff; border-color: transparent; }
+    .tab { padding: 10px 24px; border: none; background: #fff; color: #64748b; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid #e2e8f0; font-family: inherit; }
+    .tab:hover { background: #f1f5f9; color: #334155; }
+    .tab.active { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
-    .stat-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; }
-    .stat-card .value { font-size: 32px; font-weight: 700; color: #0f172a; }
+    @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+    .stat-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .stat-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 8px; }
+    .stat-card .value { font-size: 36px; font-weight: 700; color: #0f172a; }
+    .stat-card .sub { font-size: 13px; color: #94a3b8; margin-top: 4px; }
     .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 28px; }
-    .chart-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
-    .chart-container { position: relative; height: 300px; }
-    
-    /* Table Styles */
-    .search-box { margin-bottom: 16px; width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
-    .table-wrapper { overflow-x: auto; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { background: #f8fafc; text-align: left; padding: 12px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600; }
-    td { padding: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; background: #f1f5f9; font-size: 11px; margin-right: 4px; margin-bottom: 4px; }
-    .amount-cell { font-weight: 600; color: #0ea5e9; }
-    
-    @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .charts-grid { grid-template-columns: 1fr; } }
+    .charts-grid-half { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    @media (max-width: 900px) { .charts-grid, .charts-grid-half { grid-template-columns: 1fr; } }
+    .chart-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .chart-card h3 { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+    .chart-card .subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+    .chart-container { position: relative; height: 280px; }
+    .chart-container-lg { position: relative; height: 350px; }
+    .insight-card { background: #fff; border-radius: 12px; padding: 20px; border-left: 4px solid #0ea5e9; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .insight-card .icon { font-size: 24px; margin-bottom: 8px; }
+    .insight-card .title { font-size: 15px; font-weight: 600; color: #0ea5e9; margin-bottom: 8px; }
+    .insight-card .content { font-size: 14px; color: #475569; line-height: 1.7; }
+    .growth-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 20px; }
+    @media (max-width: 800px) { .growth-grid { grid-template-columns: repeat(2, 1fr); } }
+    .growth-item { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #bbf7d0; }
+    .growth-item .number { font-size: 32px; font-weight: 700; color: #059669; }
+    .growth-item .name { font-size: 14px; font-weight: 500; color: #0f172a; margin-top: 8px; }
+    .growth-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+    .region-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    @media (max-width: 800px) { .region-grid { grid-template-columns: 1fr; } }
+    .region-card { background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
+    .region-card .flag { font-size: 24px; margin-bottom: 8px; }
+    .region-card .stats { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 8px; }
+    .region-card .desc { font-size: 13px; color: #64748b; line-height: 1.6; }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; }
+    @media (max-width: 700px) { .summary-grid { grid-template-columns: 1fr; } }
+    .summary-col h4 { font-size: 14px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .summary-col.up h4 { color: #059669; }
+    .summary-col.down h4 { color: #dc2626; }
+    .summary-col ul { list-style: none; padding: 0; }
+    .summary-col li { padding: 8px 0; font-size: 14px; color: #475569; border-bottom: 1px solid #f1f5f9; }
+    .summary-col li:last-child { border-bottom: none; }
+    .filter-controls { background: #fff; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; border: 1px solid #e2e8f0; display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-end; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group select { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; background: #fff; min-width: 120px; }
+    .filter-group select:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+    .year-range { display: flex; align-items: center; gap: 8px; }
+    .year-range span { color: #64748b; font-size: 14px; }
+    .filter-summary { margin-left: auto; font-size: 14px; color: #64748b; padding: 8px 16px; background: #f1f5f9; border-radius: 8px; }
+    .filter-summary strong { color: #0f172a; }
+    .sector-section { margin-bottom: 32px; }
+    .sector-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); border-radius: 16px 16px 0 0; color: #fff; }
+    .sector-header.production { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); }
+    .sector-header.storage { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+    .sector-header.distribution { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .sector-header.applications { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    .sector-header.services { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+    .sector-header.processing { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    .sector-header.other { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+    .sector-title { display: flex; align-items: center; gap: 12px; }
+    .sector-title .icon { font-size: 28px; }
+    .sector-title h3 { font-size: 20px; font-weight: 700; }
+    .sector-stats { display: flex; gap: 24px; font-size: 14px; }
+    .sector-stats .stat { text-align: right; }
+    .sector-stats .stat-value { font-size: 24px; font-weight: 700; }
+    .sector-stats .stat-label { opacity: 0.9; font-size: 12px; }
+    .sector-deals { background: #fff; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 16px 16px; }
+    .sector-deals.empty { padding: 40px; text-align: center; color: #94a3b8; font-size: 14px; }
+    .deal-item { padding: 20px 24px; border-bottom: 1px solid #f1f5f9; display: grid; grid-template-columns: 1fr 120px 100px; gap: 16px; align-items: start; }
+    .deal-item:last-child { border-bottom: none; }
+    .deal-item:hover { background: #f8fafc; }
+    .deal-main { min-width: 0; }
+    .deal-company { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+    .deal-tech { display: inline-block; padding: 3px 10px; background: #eff6ff; color: #2563eb; border-radius: 20px; font-size: 12px; font-weight: 500; margin-bottom: 8px; }
+    .deal-desc { font-size: 13px; color: #64748b; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .deal-amount { font-size: 18px; font-weight: 700; color: #059669; text-align: right; }
+    .deal-amount.undisclosed { color: #94a3b8; font-size: 14px; }
+    .deal-meta { text-align: right; font-size: 12px; color: #94a3b8; }
+    .deal-meta .stage { display: inline-block; padding: 3px 8px; border-radius: 4px; font-weight: 500; margin-bottom: 4px; }
+    .stage-seed { background: #f0fdf4; color: #15803d; }
+    .stage-a { background: #eff6ff; color: #2563eb; }
+    .stage-b { background: #faf5ff; color: #7c3aed; }
+    .stage-growth { background: #fffbeb; color: #b45309; }
+    @media (max-width: 700px) {
+      .deal-item { grid-template-columns: 1fr; gap: 8px; }
+      .deal-amount, .deal-meta { text-align: left; }
+      .sector-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .sector-stats { width: 100%; justify-content: space-between; }
+      .filter-controls { flex-direction: column; align-items: stretch; }
+      .filter-summary { margin-left: 0; margin-top: 8px; }
+    }
+    footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -42,144 +117,205 @@
     <header>
       <div class="logo">⚡</div>
       <div>
-        <h1>水素投資トレンド分析 2021-2025</h1>
-        <p>スタートアップ投資データベース（294件）</p>
+        <h1>水素投資トレンド分析</h1>
+        <p>2021-2025年 スタートアップ投資データ（294件）</p>
       </div>
     </header>
     
     <div class="tabs">
       <button class="tab active" data-tab="overview">概要</button>
+      <button class="tab" data-tab="sectors">セクター分析</button>
       <button class="tab" data-tab="geography">地域分析</button>
-      <button class="tab" data-tab="deals">ディール一覧</button>
+      <button class="tab" data-tab="deals">代表ディール</button>
       <button class="tab" data-tab="insights">インサイト</button>
     </div>
-
+    
     <div id="overview" class="tab-content active">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div style="font-size:12px;color:#64748b">総投資額</div>
-          <div class="value">$6.7B</div>
-          <div style="font-size:12px;color:#94a3b8">2021-2025年累計</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:12px;color:#64748b">総投資件数</div>
-          <div class="value">294</div>
-          <div style="font-size:12px;color:#94a3b8">掲載スタートアップ</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:12px;color:#64748b">平均投資額</div>
-          <div class="value">$22.8M</div>
-          <div style="font-size:12px;color:#94a3b8">金額判明分のみ</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:12px;color:#64748b">対象国数</div>
-          <div class="value">30</div>
-          <div style="font-size:12px;color:#94a3b8">世界各地の投資</div>
-        </div>
+        <div class="stat-card"><div class="label">総投資額</div><div class="value">$6.7B</div><div class="sub">2021-2025年累計</div></div>
+        <div class="stat-card"><div class="label">総投資件数</div><div class="value">294</div><div class="sub">ユニーク企業: 200+</div></div>
+        <div class="stat-card"><div class="label">平均ディール</div><div class="value">$28.9M</div><div class="sub">2023年ピーク: $37.7M</div></div>
+        <div class="stat-card"><div class="label">参加国数</div><div class="value">29</div><div class="sub">米国が最大シェア</div></div>
       </div>
       <div class="charts-grid">
-        <div class="chart-card">
-          <h3>年別投資推移</h3>
-          <div class="chart-container"><canvas id="yearlyChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>セクター配分</h3>
-          <div class="chart-container"><canvas id="sectorPieChart"></canvas></div>
+        <div class="chart-card"><h3>年別投資推移</h3><p class="subtitle">投資額（百万ドル）と件数</p><div class="chart-container"><canvas id="yearlyChart"></canvas></div></div>
+        <div class="chart-card"><h3>セクター別投資額</h3><p class="subtitle">単位: 百万ドル</p><div class="chart-container"><canvas id="sectorPieChart"></canvas></div></div>
+      </div>
+      <div class="chart-card"><h3>投資ステージ推移</h3><p class="subtitle">年別の投資ラウンド構成（件数）</p><div class="chart-container"><canvas id="stageChart"></canvas></div></div>
+    </div>
+    
+    <div id="sectors" class="tab-content">
+      <div class="charts-grid-half">
+        <div class="chart-card"><h3>電解槽技術タイプ別投資</h3><p class="subtitle">製造技術別の投資額（百万ドル）</p><div class="chart-container"><canvas id="electrolysisChart"></canvas></div></div>
+        <div class="chart-card"><h3>セクター構成比の変化</h3><p class="subtitle">年別の投資配分（%）</p><div class="chart-container"><canvas id="sectorTrendChart"></canvas></div></div>
+      </div>
+      <div class="chart-card"><h3>新興技術の成長</h3><p class="subtitle">2021-22年 vs 2024-25年の投資件数変化</p>
+        <div class="growth-grid">
+          <div class="growth-item"><div class="number">+6</div><div class="name">天然水素抽出</div><div class="detail">0件 → 6件</div></div>
+          <div class="growth-item"><div class="number">+2</div><div class="name">液体水素キャリア</div><div class="detail">1件 → 3件</div></div>
+          <div class="growth-item"><div class="number">+1</div><div class="name">熱分解</div><div class="detail">0件 → 1件</div></div>
+          <div class="growth-item"><div class="number">+1</div><div class="name">固体水素キャリア</div><div class="detail">2件 → 3件</div></div>
         </div>
       </div>
     </div>
-
+    
     <div id="geography" class="tab-content">
-      <div class="chart-card">
-        <h3>主要5カ国の投資額推移 (M$)</h3>
-        <p style="font-size:12px;color:#94a3b8;margin-bottom:15px">地域ごとのトレンド推移を比較</p>
-        <div class="chart-container" style="height:400px"><canvas id="regionalTrendChart"></canvas></div>
+      <div class="charts-grid-half">
+        <div class="chart-card"><h3>国別投資額</h3><p class="subtitle">上位8カ国（百万ドル）</p><div class="chart-container"><canvas id="countryChart"></canvas></div></div>
+        <div class="chart-card"><h3>主要投資家</h3><p class="subtitle">投資件数ランキング</p><div class="chart-container"><canvas id="investorChart"></canvas></div></div>
       </div>
-      <div class="chart-card">
-        <h3>国別累計投資額 (Top 8)</h3>
-        <div class="chart-container"><canvas id="countryChart"></canvas></div>
+      <div class="chart-card"><h3>主要国の年別投資推移</h3><p class="subtitle">上位5カ国の投資額推移（百万ドル）</p><div class="chart-container-lg"><canvas id="countryYearlyChart"></canvas></div></div>
+      <div class="chart-card" style="margin-top: 20px;"><h3>地域別特徴</h3>
+        <div class="region-grid">
+          <div class="region-card"><div class="flag">🇺🇸 米国</div><div class="stats">$3.1B / 116件</div><div class="desc">電解槽・メタン熱分解・アンモニアなど全分野をカバー。大型Growth Equityが多い</div></div>
+          <div class="region-card"><div class="flag">🇩🇪 ドイツ</div><div class="stats">$896M / 19件</div><div class="desc">固体酸化物電解槽(SOEC)とLOHC貯蔵技術に強み。Sunfire等の大型企業</div></div>
+          <div class="region-card"><div class="flag">🇨🇳 中国</div><div class="stats">$637M / 27件</div><div class="desc">固体水素貯蔵・燃料電池応用に注力。件数対比で小規模投資が多い</div></div>
+        </div>
       </div>
     </div>
-
+    
     <div id="deals" class="tab-content">
-      <div class="chart-card">
-        <h3>個別ディール一覧</h3>
-        <input type="text" id="dealSearch" class="search-box" placeholder="企業名、技術領域、概要を検索...">
-        <div class="table-wrapper">
-          <table id="dealTable">
-            <thead>
-              <tr>
-                <th style="width:100px">時期</th>
-                <th style="width:150px">企業名</th>
-                <th style="width:120px">投資額</th>
-                <th>技術領域</th>
-                <th>事業概要</th>
-              </tr>
-            </thead>
-            <tbody id="dealTableBody">
-              </tbody>
-          </table>
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>年（範囲）</label>
+          <div class="year-range">
+            <select id="yearFrom"><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option></select>
+            <span>〜</span>
+            <select id="yearTo"><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025" selected>2025</option></select>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>投資ステージ</label>
+          <select id="stageFilter"><option value="">すべて</option><option value="Seed">Seed</option><option value="Series A">Series A</option><option value="Series B">Series B</option><option value="Growth Equity">Growth Equity</option></select>
+        </div>
+        <div class="filter-summary">対象: <strong id="filterCount">294</strong>件 / 294件</div>
+      </div>
+      <div id="dealsContainer"></div>
+    </div>
+    
+    <div id="insights" class="tab-content">
+      <div class="insight-card"><div class="icon">📈</div><div class="title">市場成熟化の兆候</div><div class="content">2022-23年をピークに投資件数・金額ともに減少傾向。平均ディールサイズは2023年の$37.7Mから2025年は$18.5Mに低下。初期の熱狂が収束し、選別投資フェーズに移行中。</div></div>
+      <div class="insight-card"><div class="icon">🏭</div><div class="title">Production（製造）への集中加速</div><div class="content">製造セクターへの投資比率が2021年の69.5%から2025年は83.5%に上昇。特に電解槽技術が全体の4割以上を占める。一方、Distribution（流通）への投資は13.6%→0%に急減。</div></div>
+      <div class="insight-card"><div class="icon">⚡</div><div class="title">電解槽技術の競争激化</div><div class="content">PEM電解槽が約10億ドルで最大投資を集めるが、固体酸化物電解槽(SOEC)が2024年に急成長（年間2.8億ドル）。高効率・高温運転のSOECが次世代技術として注目。AEM電解槽も件数では健闘。</div></div>
+      <div class="insight-card"><div class="icon">🌍</div><div class="title">天然水素（地下水素）の急浮上</div><div class="content">2023年以前はゼロだった天然水素抽出技術が2024-25年に6件の投資を獲得。Koloma社が$245Mを調達するなど、新たな水素源として期待。製造コスト大幅削減の可能性。</div></div>
+      <div class="insight-card"><div class="icon">🔋</div><div class="title">アンモニア経済の進展</div><div class="content">水素キャリアとしてのアンモニアへの投資が継続。Amogy社は累計$220M以上を調達し、船舶用燃料電池などの実用化を推進。グリーンアンモニア製造＋利用の両面で投資。</div></div>
+      <div class="insight-card"><div class="icon">💰</div><div class="title">投資家の二極化</div><div class="content">AP Ventures(21件)、Breakthrough Energy Ventures(17件)がリード。石油メジャー系（Aramco、Chevron、Shell）と産業系（三菱重工、Baker Hughes）が積極参入。戦略投資家の比重増加。</div></div>
+      <div class="chart-card" style="margin-top: 24px;"><h3>5年間の主要トレンドまとめ</h3>
+        <div class="summary-grid">
+          <div class="summary-col up"><h4>📈 増加傾向</h4><ul><li>製造セクター全体（特に電解槽）</li><li>固体酸化物電解槽(SOEC)技術</li><li>天然水素抽出技術</li><li>Growth Equity比率の上昇</li><li>ヨーロッパ（ベルギー、エストニア等）の台頭</li></ul></div>
+          <div class="summary-col down"><h4>📉 減少傾向</h4><ul><li>全体の投資件数・金額（2023年ピーク後）</li><li>Distribution（流通・給油所）</li><li>メタン熱分解（2022年がピーク）</li><li>Series B ラウンド件数</li><li>早期段階（Seed）の割合</li></ul></div>
         </div>
       </div>
     </div>
-
-    <div id="insights" class="tab-content">
-        <div class="chart-card">
-            <h3>データ分析からのインサイト</h3>
-            <div style="margin-top:20px">
-                <p><strong>1. 市場の選別期：</strong> 2022-23年をピークに全体額は減少。一方、1件あたりの質が重視されるフェーズへ。</p>
-                <p><strong>2. 製造(Production)への集中：</strong> 全投資の約74%が水素製造技術（電解槽等）に集中しており、供給側のインフラ構築が優先されている。</p>
-                <p><strong>3. 米国の圧倒的リード：</strong> 累計$3.1Bを超え、次点のドイツ（$0.9B）を大きく引き離す。政策(IRA等)の影響が顕著。</p>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-      *2025年データはQ4までの途中経過 | データソース: Hydrogen Investment Dataset
-    </footer>
+    
+    <footer>*2025年データは途中経過（Q4まで） | データソース: 水素スタートアップ投資データベース（294件）</footer>
   </div>
-
+  
   <script>
-    // --- Data Management ---
-    // データの読み込み（一部抜粋。実際はCSVから全件生成）
-    const dealsData = [
-      {date: '2025/Q4', company: 'SPARK Cleantech', amount: '$34.9M', sector: 'Production > Methane Pyrolysis', summary: '温室効果ガスを水素燃料に変えるプラズマ技術の開発'},
-      {date: '2025/Q4', company: 'HYDGEN', amount: '$5.0M', sector: 'Production > Electrolysis > AEM', summary: 'シンガポール国立大学発、スケールアップ可能なAEM電解槽'},
-      {date: '2025/Q4', company: 'RIFT', amount: '$3.5M', sector: 'Storage > Material Carriers', summary: '水素添加を必要としない鉄粉による水素エネルギー貯蔵'},
-      {date: '2025/Q4', company: 'Neology', amount: '$2.1M', sector: 'Applications > Ammonia Cracking', summary: '燃料電池用アンモニアクラッキング装置の開発'},
-      {date: '2024/Q3', company: 'Koloma', amount: '$245.7M', sector: 'Production > Natural Hydrogen', summary: '地下からの天然水素抽出技術、Bill Gates等が出資'},
-      {date: '2023/Q1', company: 'Sunfire', amount: '$234.0M', sector: 'Production > SOEC Electrolysis', summary: 'ドイツを代表する高温固体酸化物電解槽メーカー'},
-      {date: '2022/Q2', company: 'Electric Hydrogen', amount: '$198.0M', sector: 'Production > PEM Electrolysis', summary: '超大型PEM電解槽による化石燃料代替コストの実現'}
-      // ... 全294件を想定したテーブル表示ロジックは下記
-    ];
+const allDeals = [{"q": "2025/Q4", "y": "2025", "c": "SPARK Cleantech", "a": 34926000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "France", "d": "Developer of a plasma technology designed to turn greenhouse gases into hydrogen fuel"}, {"q": "2025/Q4", "y": "2025", "c": "HYDGEN", "a": 5000000, "s": "production", "t": "electrolysis > aem", "st": "Seed", "co": "Singapore", "d": "Developer of scalable anion exchange membrane electrolyzers spun out of National University of Singapore (NUS)"}, {"q": "2025/Q4", "y": "2025", "c": "RIFT", "a": 3454500, "s": "storage", "t": "material hydrogen carriers", "st": "Series A", "co": "Netherlands", "d": "Provider of hydrogen energy storage in iron powder that does not require hydrogenation"}, {"q": "2025/Q4", "y": "2025", "c": "Neology", "a": 2134010, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "Switzerland", "d": "Developer of a thermochemical ammonia cracking device for a hydrogen feedstock for fuel cells"}, {"q": "2025/Q4", "y": "2025", "c": "Steelhead Composites", "a": 1918646, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2025/Q4", "y": "2025", "c": "Tobe Energy", "a": 0, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Developer of hydrogen electrolyzer technologies"}, {"q": "2025/Q3", "y": "2025", "c": "Tulum Energy", "a": 27000000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "Italy", "d": "Developer of methane pyrolysis platform for hydrogen production using repurposed equipment for industrial applications"}, {"q": "2025/Q3", "y": "2025", "c": "Amogy", "a": 23000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Growth Equity", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2025/Q3", "y": "2025", "c": "Crosstown H2R", "a": 3750000, "s": "energy & power applications", "t": "energy & power applications", "st": "Series A", "co": "Germany", "d": "Developer of gas turbines and combustion burners"}, {"q": "2025/Q3", "y": "2025", "c": "Lhyfe", "a": 2900000, "s": "production", "t": "production", "st": "Growth Equity", "co": "France", "d": "Developer of turnkey solution for the production of green, modular and rapidly deployable hydrogen for mobility and industry"}, {"q": "2025/Q3", "y": "2025", "c": "Xingong Green Hydrogen", "a": 0, "s": "energy & power applications", "t": "power generation systems", "st": "Seed", "co": "China", "d": "developer of high-end electric-hydrogen energy technology and equipmen"}, {"q": "2025/Q3", "y": "2025", "c": "Stargate Hydrogen", "a": 0, "s": "production", "t": "electrolysis > alkaline", "st": "Series A", "co": "Estonia", "d": "Developer of alkaline modular turnkey hydrogen production systems and electrolyzers"}, {"q": "2025/Q2", "y": "2025", "c": "John Cockerill Hydrogen", "a": 135511200, "s": "production", "t": "electrolysis > alkaline", "st": "Growth Equity", "co": "Belgium", "d": "Developer of alkaline electrolyzers and storage solutions; subsidiary of John Cockerill"}, {"q": "2025/Q2", "y": "2025", "c": "Hy2gen", "a": 53619950, "s": "production", "t": "production", "st": "Growth Equity", "co": "Germany", "d": "Producer of green hydrogen"}, {"q": "2025/Q2", "y": "2025", "c": "Hystar", "a": 36000000, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "Norway", "d": "Developer of PEM electrolyzers for large scale green hydrogen production"}, {"q": "2025/Q2", "y": "2025", "c": "Atawey", "a": 25784000, "s": "production", "t": "production", "st": "Growth Equity", "co": "France", "d": "Designer and manufacturer of autonomous energy solutions for isolated sites"}, {"q": "2025/Q2", "y": "2025", "c": "Elemental Advanced Materials", "a": 20000000, "s": "production", "t": "production", "st": "Seed", "co": "United States", "d": "Developer of advanced materials using plastics, gases and hydrocarbons as feedstock"}, {"q": "2025/Q2", "y": "2025", "c": "HYMETH", "a": 4281265, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Denmark", "d": "Producer of hydrogen and methane"}, {"q": "2025/Q2", "y": "2025", "c": "Hydrogen Technology", "a": 2086666, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developer of high efficiency catalysts, green methanol and green aviation fuel."}, {"q": "2025/Q2", "y": "2025", "c": "pHydrogen", "a": 2079773, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Japan", "d": "Developer of electrolyzers to produce green hydrogen"}, {"q": "2025/Q2", "y": "2025", "c": "Weishi Energy", "a": 0, "s": "other", "t": "", "st": "Growth Equity", "co": "China", "d": "Developers and producers of hydrogen fuel cell products"}, {"q": "2025/Q2", "y": "2025", "c": "AiHydrogen Technology", "a": 0, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developer of magnesium-based solid-state hydrogen storage and transportation technology"}, {"q": "2025/Q1", "y": "2025", "c": "Amogy", "a": 56000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Growth Equity", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2025/Q1", "y": "2025", "c": "H2SITE", "a": 39011492, "s": "production", "t": "production", "st": "Series B", "co": "Spain", "d": "Provider of membrane-based liquid reforming systems for ammonia and methanol cracking"}, {"q": "2025/Q1", "y": "2025", "c": "Hydrogenious LOHC Technologies", "a": 18567972, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "Germany", "d": "Developer of hydrogen storage in the form of 'Liquid Organic Hydrogen Carriers' for multi-megawatt energy systems"}, {"q": "2025/Q1", "y": "2025", "c": "Supercritical Solutions", "a": 18154150, "s": "production", "t": "electrolysis", "st": "Series A", "co": "United Kingdom", "d": "Developer of an electrolyser that uses heat and pressure for a step change in efficiency, producing hydrogen with zero emissions"}, {"q": "2025/Q1", "y": "2025", "c": "Xingran Technology", "a": 13699800, "s": "production", "t": "production", "st": "Seed", "co": "China", "d": "Developer of PEM water electrolysis hydrogen production equipment and developer of catalysts, membrane electrodes, plates and other components"}, {"q": "2025/Q1", "y": "2025", "c": "Stargate Hydrogen", "a": 11873400, "s": "production", "t": "electrolysis > alkaline", "st": "Series A", "co": "Estonia", "d": "Developer of alkaline modular turnkey hydrogen production systems and electrolyzers"}, {"q": "2025/Q1", "y": "2025", "c": "Juzhi Hezhong", "a": 7960000, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developer of hydrogen hybrid power systems"}, {"q": "2025/Q1", "y": "2025", "c": "Mote", "a": 7000000, "s": "production", "t": "biomass / waste", "st": "Series A", "co": "United States", "d": "Developers of hydrogen and stored carbon from wood biomass waste"}, {"q": "2025/Q1", "y": "2025", "c": "Advanced Ionics", "a": 6700000, "s": "production", "t": "electrolysis", "st": "Series A", "co": "United States", "d": "Developer of symbiotic electrolyzers that can utilize waste heat sources for industrial use"}, {"q": "2025/Q1", "y": "2025", "c": "Elcogen", "a": 5150750, "s": "production", "t": "electrolysis > solid oxide > electrolyte-supported", "st": "Growth Equity", "co": "Estonia", "d": "Manufacturer and developer of anode-supported Intermediate Temperature Solid Oxide Fuel Cells"}, {"q": "2025/Q1", "y": "2025", "c": "Mantle8", "a": 3530730, "s": "production", "t": "extraction", "st": "Seed", "co": "France", "d": "Developer of predictive technology that accurately models and detects natural hydrogen locations for future extraction"}, {"q": "2025/Q1", "y": "2025", "c": "HYDGEN", "a": 1490924, "s": "production", "t": "electrolysis > aem", "st": "Seed", "co": "Singapore", "d": "Developer of scalable anion exchange membrane electrolyzers spun out of National University of Singapore (NUS)"}, {"q": "2025/Q1", "y": "2025", "c": "Series A", "a": 1039350, "s": "production", "t": "electrolysis > solid oxide", "st": "Seed", "co": "Estonia", "d": "Developer of micro-tubular solid oxide fuel cells (mSOFCs) for portable and off-grid energy solutions"}, {"q": "2025/Q1", "y": "2025", "c": "O1GREEN", "a": 313320, "s": "storage", "t": "large-scale", "st": "Seed", "co": "Italy", "d": "Producer of containers made of Magnesium with advanced manufacture processes by 3D printers, in order to store Hydrogen bonded as Magnesium Hydride"}, {"q": "2025/Q1", "y": "2025", "c": "Avoxt", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "Netherlands", "d": "Developer of advanced technology for extremely efficient hydrogen production"}, {"q": "2025/Q1", "y": "2025", "c": "DirectH2", "a": 0, "s": "other", "t": "", "st": "Seed", "co": "United States", "d": "Developer of modular hydrogen solutions"}, {"q": "2025/Q1", "y": "2025", "c": "Hyting", "a": 0, "s": "energy & power applications", "t": "boilers & heat pumps", "st": "Seed", "co": "Germany", "d": "Developer of hydrogen heating systems and air heating systems for non-residential buildings"}, {"q": "2025/Q1", "y": "2025", "c": "Snowfox Discovery", "a": 0, "s": "production", "t": "extraction", "st": "Series A", "co": "United Kingdom", "d": "Developer of natural hydrogen extraction and production"}, {"q": "2024/Q4", "y": "2024", "c": "Elyse Energy", "a": 126129250, "s": "services", "t": "project development", "st": "Growth Equity", "co": "France", "d": "Provider of hydrogen project procurement services"}, {"q": "2024/Q4", "y": "2024", "c": "Koloma", "a": 50000000, "s": "production", "t": "extraction", "st": "Series B", "co": "United States", "d": "Provider of natural hydrogen production solutions"}, {"q": "2024/Q4", "y": "2024", "c": "Mingyang Hydrogen Energy", "a": 13701820, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developer of hydrogen energy systems"}, {"q": "2024/Q4", "y": "2024", "c": "RIFT", "a": 11897036, "s": "storage", "t": "material hydrogen carriers", "st": "Series A", "co": "Netherlands", "d": "Provider of hydrogen energy storage in iron powder that does not require hydrogenation"}, {"q": "2024/Q4", "y": "2024", "c": "Hydrogen Mem-Tech", "a": 6817608, "s": "production", "t": "production", "st": "Growth Equity", "co": "Norway", "d": "Developers of hydrogen separation technology with carbon capture"}, {"q": "2024/Q4", "y": "2024", "c": "Calicat", "a": 3000000, "s": "production", "t": "electrolysis > pem", "st": "Series A", "co": "United States", "d": "Developer of iridium-free PEM electrolyzers"}, {"q": "2024/Q4", "y": "2024", "c": "Nanke Hegu", "a": 2760000, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developer of hydrogen production catalyst"}, {"q": "2024/Q4", "y": "2024", "c": "1s1 Energy", "a": 1400000, "s": "production", "t": "electrolysis > pem", "st": "Seed", "co": "United States", "d": "Manufacturer of proprietary PEM water electrolysis systems"}, {"q": "2024/Q4", "y": "2024", "c": "Kaizen Clean Energy", "a": 910000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series A", "co": "United States", "d": "Designer, developer and manufacturer of hydrogen generators for distributed power generation and hydrogen production"}, {"q": "2024/Q4", "y": "2024", "c": "Hyphen Hydrogen Energy", "a": 0, "s": "services", "t": "project development", "st": "Growth Equity", "co": "Namibia", "d": "Developer of green hydrogen-to-ammonia production projects."}, {"q": "2024/Q4", "y": "2024", "c": "Found Energy", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "United States", "d": "Developer of carbon-free process to produce hydrogen from aluminum waste from landfills"}, {"q": "2024/Q3", "y": "2024", "c": "Utility Global", "a": 53000000, "s": "production", "t": "production", "st": "Growth Equity", "co": "United States", "d": "Developer of a solid oxide electrochemical reactor to deliver blue hydrogen 30% cheaper and with 30% lower emissions than steam methane reforming"}, {"q": "2024/Q3", "y": "2024", "c": "Steelhead Composites", "a": 15000000, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2024/Q3", "y": "2024", "c": "Marvel Tech", "a": 14000000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series B", "co": "China", "d": "Developer of hydrogen-based power generation technology and products"}, {"q": "2024/Q3", "y": "2024", "c": "Dynelectro", "a": 11981860, "s": "production", "t": "electrolysis > solid oxide > electrode-supported", "st": "Series B", "co": "Denmark", "d": "Manufacturer Dynamic Electrolyser Units (DEUs) which produce green hydrogen for carbon-neutral eFuels"}, {"q": "2024/Q3", "y": "2024", "c": "Power to Hydrogen (P2H2)", "a": 10000000, "s": "production", "t": "electrolysis > multi-stage", "st": "Series A", "co": "United States", "d": "Provider of Anion Exchange Membrane technologies to produce hydrogen"}, {"q": "2024/Q3", "y": "2024", "c": "Ayrton Energy", "a": 6800000, "s": "storage", "t": "liquid hydrogen carriers", "st": "Seed", "co": "Canada", "d": "Developer of technology that enables hydrogen to be stored within an organic liquid similar to gasoline"}, {"q": "2024/Q3", "y": "2024", "c": "DRIFT Energy", "a": 6479900, "s": "distribution", "t": "refuelling", "st": "Series A", "co": "United Kingdom", "d": "Developer of technology to harvest green hydrogen from underwater turbines and produce green hydrogen on board to distribute to ports"}, {"q": "2024/Q3", "y": "2024", "c": "Hgen", "a": 5000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Producer of modular electrolyzers for hydrogen production"}, {"q": "2024/Q3", "y": "2024", "c": "C-Zero", "a": 5000000, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United States", "d": "Methane pyrolysis technology to break down methane into hydrogen and solid carbon"}, {"q": "2024/Q3", "y": "2024", "c": "Watermeln", "a": 3903900, "s": "energy & power applications", "t": "power generation systems", "st": "Seed", "co": "Netherlands", "d": "Developer of a mobile green hydrogen generator"}, {"q": "2024/Q3", "y": "2024", "c": "Neprie", "a": 3100000, "s": "storage", "t": "storage", "st": "Seed", "co": "China", "d": "Developer of high-density hydrogen storage systems"}, {"q": "2024/Q3", "y": "2024", "c": "Zahlerfreunde", "a": 1000000, "s": "processing", "t": "control & metering", "st": "Seed", "co": "Germany", "d": "Provider of smart metering technologies"}, {"q": "2024/Q3", "y": "2024", "c": "Purewave Hydrogen", "a": 455000, "s": "production", "t": "extraction", "st": "Seed", "co": "United States", "d": "Developer of natural hydrogen"}, {"q": "2024/Q3", "y": "2024", "c": "Monolith", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United States", "d": "Developer of a plasma pyrolysis technology that transforms natural gas into turquoise hydrogen and produces carbon black"}, {"q": "2024/Q3", "y": "2024", "c": "HYMETH", "a": 0, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Denmark", "d": "Producer of hydrogen and methane"}, {"q": "2024/Q3", "y": "2024", "c": "Paide New Energy", "a": 0, "s": "production", "t": "electrolysis", "st": "Seed", "co": "China", "d": "Manufacturer of key materials for hydrogen energy and water electrolysis."}, {"q": "2024/Q3", "y": "2024", "c": "Hydrogen Green Dynamic Energy", "a": 0, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "China", "d": "Developer of ammonia hydrogen internal combustion engine"}, {"q": "2024/Q3", "y": "2024", "c": "Ohmium", "a": 0, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "United States", "d": "Developer of PEM electrolyzers"}, {"q": "2024/Q3", "y": "2024", "c": "H2Au", "a": 0, "s": "production", "t": "extraction", "st": "Seed", "co": "United Kingdom", "d": "Developer of natural hydrogen extraction"}, {"q": "2024/Q2", "y": "2024", "c": "John Cockerill Hydrogen", "a": 250033000, "s": "production", "t": "electrolysis > alkaline", "st": "Growth Equity", "co": "Belgium", "d": "Developer of alkaline electrolyzers and storage solutions; subsidiary of John Cockerill"}, {"q": "2024/Q2", "y": "2024", "c": "Hysata", "a": 111000000, "s": "production", "t": "electrolysis > capillary-fed", "st": "Series B", "co": "Australia", "d": "Developer of capillary-fed hydrogen electrolyser, producing green hydrogen for steel, transport and chemical sectors"}, {"q": "2024/Q2", "y": "2024", "c": "Stargate Hydrogen", "a": 45195360, "s": "production", "t": "electrolysis > alkaline", "st": "Seed", "co": "Estonia", "d": "Developer of alkaline modular turnkey hydrogen production systems and electrolyzers"}, {"q": "2024/Q2", "y": "2024", "c": "Elcogen", "a": 33483565, "s": "production", "t": "electrolysis > solid oxide > electrolyte-supported", "st": "Growth Equity", "co": "Estonia", "d": "Manufacturer and developer of anode-supported Intermediate Temperature Solid Oxide Fuel Cells"}, {"q": "2024/Q2", "y": "2024", "c": "Green Energy Park", "a": 30000000, "s": "production", "t": "electrolysis", "st": "Series A", "co": "Brazil", "d": "Provider of hydrogen production plants"}, {"q": "2024/Q2", "y": "2024", "c": "Molten Industries", "a": 25000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "United States", "d": "Provider of methane pyrolysis technology to generate zero carbon hydrogen"}, {"q": "2024/Q2", "y": "2024", "c": "Zhongke Qingneng", "a": 22214800, "s": "storage", "t": "liquid hydrogen carriers", "st": "Seed", "co": "China", "d": "Developer of hydrogen liquefaction equipment"}, {"q": "2024/Q2", "y": "2024", "c": "Found Energy", "a": 12000000, "s": "production", "t": "production", "st": "Seed", "co": "United States", "d": "Developer of carbon-free process to produce hydrogen from aluminum waste from landfills"}, {"q": "2024/Q2", "y": "2024", "c": "Rotoboost", "a": 10000000, "s": "production", "t": "thermolysis", "st": "Series A", "co": "Norway", "d": "Developer of Thermo-Catalytic Decomposition (TCD) technology for hydrogen production"}, {"q": "2024/Q2", "y": "2024", "c": "Southern Lights", "a": 1778700, "s": "services", "t": "project development", "st": "Seed", "co": "Sweden", "d": "Designer of web-based tool to assess the feasibility of green hydrogen projects"}, {"q": "2024/Q2", "y": "2024", "c": "Yipu Technology", "a": 1378417, "s": "production", "t": "electrolysis > alkaline", "st": "Series A", "co": "China", "d": "Developer of alkaline electrolysis technology for hydrogen production"}, {"q": "2024/Q2", "y": "2024", "c": "Clyde Hydrogen", "a": 1255600, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United Kingdom", "d": "Developer of decoupled electrolyser technology for green hydrogen production"}, {"q": "2024/Q2", "y": "2024", "c": "Hydrosonics", "a": 875000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Developer of hydrogen production electrolysis technology"}, {"q": "2024/Q2", "y": "2024", "c": "Hywaves", "a": 62150, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United Kingdom", "d": "Developer of electronics design architecture to enhance hydrogen production from electrolysers"}, {"q": "2024/Q2", "y": "2024", "c": "Leidong Energy", "a": 0, "s": "production", "t": "electrolysis", "st": "Series A", "co": "China", "d": "Developer of hydrogen and wind energy production and storage technologies"}, {"q": "2024/Q2", "y": "2024", "c": "Verne", "a": 0, "s": "storage", "t": "storage", "st": "Series A", "co": "United States", "d": "Developer of green hydrogen storage solutions for decarbonization in the transport sector"}, {"q": "2024/Q1", "y": "2024", "c": "Koloma", "a": 245000000, "s": "production", "t": "extraction", "st": "Series B", "co": "United States", "d": "Provider of natural hydrogen production solutions"}, {"q": "2024/Q1", "y": "2024", "c": "Sunfire", "a": 233000000, "s": "production", "t": "electrolysis > solid oxide", "st": "Growth Equity", "co": "Germany", "d": "Provider of energy conversion technologies, including solid oxide fuel cells and renewable synthetic fuels based on solid oxide electrolyzers"}, {"q": "2024/Q1", "y": "2024", "c": "EvolOH", "a": 20000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Manufacturer of alkaline electrolyzer stacks for green hydrogen production"}, {"q": "2024/Q1", "y": "2024", "c": "Rimere", "a": 10000000, "s": "production", "t": "production", "st": "Seed", "co": "United States", "d": "Provider of plasma technology to produce hydrogen and graphene (blue hydrogen), and methane decarbonization plasma technology"}, {"q": "2024/Q1", "y": "2024", "c": "Suiso", "a": 3810000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "United Kingdom", "d": "Developer of hydrogen production using microwave-driven methane pyrolysis process"}, {"q": "2024/Q1", "y": "2024", "c": "H2 Hysun", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "Spain", "d": "Developer of off-grid hydrogen production technology"}, {"q": "2024/Q1", "y": "2024", "c": "Dynelectro", "a": 0, "s": "production", "t": "electrolysis > solid oxide > electrode-supported", "st": "Series A", "co": "Denmark", "d": "Manufacturer Dynamic Electrolyser Units (DEUs) which produce green hydrogen for carbon-neutral eFuels"}, {"q": "2024/Q1", "y": "2024", "c": "Storegga Geotechnologies", "a": 0, "s": "production", "t": "electrolysis", "st": "Growth Equity", "co": "United Kingdom", "d": "Developer of carbon capture and hydrogen technology"}, {"q": "2023/Q4", "y": "2023", "c": "Electric Hydrogen", "a": 380000000, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "United States", "d": "Provider of a novel electrolysis-based hydrogen production technology for industrial-scale applications"}, {"q": "2023/Q4", "y": "2023", "c": "Elcogen", "a": 48200000, "s": "production", "t": "electrolysis > solid oxide > electrolyte-supported", "st": "Growth Equity", "co": "Estonia", "d": "Manufacturer and developer of anode-supported Intermediate Temperature Solid Oxide Fuel Cells"}, {"q": "2023/Q4", "y": "2023", "c": "Monarch Energy", "a": 25000000, "s": "services", "t": "project development", "st": "Series A", "co": "United States", "d": "Developer of green hydrogen projects"}, {"q": "2023/Q4", "y": "2023", "c": "NovoHydrogen", "a": 20000000, "s": "services", "t": "project development", "st": "Series A", "co": "United States", "d": "Provider of hydrogen production and electrolyzer technologies"}, {"q": "2023/Q4", "y": "2023", "c": "Solhyd", "a": 6460000, "s": "production", "t": "production", "st": "Seed", "co": "Belgium", "d": "Developer of hydrogen panels that use solar energy to directly make hydrogen gas for green hydrogen production"}, {"q": "2023/Q4", "y": "2023", "c": "Kaizen Clean Energy", "a": 3000000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series A", "co": "United States", "d": "Designer, developer and manufacturer of hydrogen generators for distributed power generation and hydrogen production"}, {"q": "2023/Q4", "y": "2023", "c": "SPARK Cleantech", "a": 1471820, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "France", "d": "Developer of a plasma technology designed to turn greenhouse gases into hydrogen fuel"}, {"q": "2023/Q4", "y": "2023", "c": "HiiROC", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United Kingdom", "d": "Developer of a transformative, low-cost, zero-emission hydrogen production system"}, {"q": "2023/Q4", "y": "2023", "c": "Found Energy", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "United States", "d": "Developer of carbon-free process to produce hydrogen from aluminum waste from landfills"}, {"q": "2023/Q4", "y": "2023", "c": "GRZ Technologies", "a": 0, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "Switzerland", "d": "Developer of energy storage solutions in the form of hydrogen"}, {"q": "2023/Q4", "y": "2023", "c": "Arculus Solutions", "a": 0, "s": "distribution", "t": "pipelines", "st": "Series A", "co": "United States", "d": "Developer of hydrogen-barrier coatings for metal pipelines, storage tanks, and EVs to prevent embrittlement"}, {"q": "2023/Q4", "y": "2023", "c": "Eternal Power", "a": 0, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Producer of green hydrogen"}, {"q": "2023/Q3", "y": "2023", "c": "InterContinental Energy", "a": 115000000, "s": "services", "t": "project development", "st": "Growth Equity", "co": "China", "d": "Developer of large scale renewable energy projects, including green hydrogen and green fuel production facilities"}, {"q": "2023/Q3", "y": "2023", "c": "Sinoscience Fullcryo", "a": 110500000, "s": "distribution", "t": "distribution", "st": "Growth Equity", "co": "China", "d": "Developer of large-scale cryogenic solutions and products for distribution and storage of hydrogen and helium"}, {"q": "2023/Q3", "y": "2023", "c": "Koloma", "a": 91000000, "s": "production", "t": "extraction", "st": "Series A", "co": "United States", "d": "Provider of natural hydrogen production solutions"}, {"q": "2023/Q3", "y": "2023", "c": "Verdagy", "a": 73000000, "s": "production", "t": "electrolysis > aem", "st": "Series B", "co": "United States", "d": "Developer of a electrochemical cell for green hydrogen production"}, {"q": "2023/Q3", "y": "2023", "c": "REGA Energy Group", "a": 65421000, "s": "services", "t": "financing", "st": "Series B", "co": "Portugal", "d": "Owner and operator of biomethane and green hydrogen plants for industrial companies"}, {"q": "2023/Q3", "y": "2023", "c": "Hycamite TCD Technologies", "a": 27589000, "s": "production", "t": "methane pyrolysis", "st": "Series B", "co": "Finland", "d": "Provider of a low-carbon hydrogen production technology, decomposing methane and capturing carbon in a solid"}, {"q": "2023/Q3", "y": "2023", "c": "Carbon Energy Technology", "a": 13713282, "s": "production", "t": "electrolysis > alkaline", "st": "Series A", "co": "China", "d": "Provider of carbon capture and utilization solutions for industrial processes, manufacturer of composite membranes for alkaline water electrolysis, and provider of wastewater solutions"}, {"q": "2023/Q3", "y": "2023", "c": "Advanced Ionics", "a": 12500000, "s": "production", "t": "electrolysis", "st": "Series A", "co": "United States", "d": "Developer of symbiotic electrolyzers that can utilize waste heat sources for industrial use"}, {"q": "2023/Q3", "y": "2023", "c": "Rotoboost", "a": 10000000, "s": "production", "t": "thermolysis", "st": "Seed", "co": "Norway", "d": "Developer of Thermo-Catalytic Decomposition (TCD) technology for hydrogen production"}, {"q": "2023/Q3", "y": "2023", "c": "Peregrine Hydrogen", "a": 7800000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Producer of green hydrogen and chemical by-products"}, {"q": "2023/Q3", "y": "2023", "c": "ETCH", "a": 7500000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "United States", "d": "Developer of methane pyrolysis technologies"}, {"q": "2023/Q3", "y": "2023", "c": "Turn2X", "a": 4721228, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Germany", "d": "Provider of renewable natural gas from methanation"}, {"q": "2023/Q3", "y": "2023", "c": "Steelhead Composites", "a": 1896235, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2023/Q3", "y": "2023", "c": "Big Navajo Energy (BNE)", "a": 0, "s": "services", "t": "independent hydrogen producer (ipp) / turnkey", "st": "Growth Equity", "co": "United States", "d": "Owner and operator of renewable energy assets, provider of power generators, and producer of hydrogen and hydrogen technologies"}, {"q": "2023/Q2", "y": "2023", "c": "Ohmium", "a": 250000000, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "United States", "d": "Developer of PEM electrolyzers"}, {"q": "2023/Q2", "y": "2023", "c": "Modern Hydrogen", "a": 32800000, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United States", "d": "Developer of thermionic energy converters to produce electricity with heat from any fuel source, including natural gas, biogas and green hydrogen"}, {"q": "2023/Q2", "y": "2023", "c": "Clean Hydrogen Works", "a": 30000000, "s": "services", "t": "project development", "st": "Seed", "co": "United States", "d": "Project developer of clean hydrogen and ammonia production"}, {"q": "2023/Q2", "y": "2023", "c": "Zhongtai Maritime Technology", "a": 13933000, "s": "storage", "t": "liquid hydrogen carriers", "st": "Series A", "co": "China", "d": "Developer of liquid hydrogen storage and maritime transportation technology"}, {"q": "2023/Q2", "y": "2023", "c": "Amogy", "a": 11000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series B", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2023/Q2", "y": "2023", "c": "Endua", "a": 7800000, "s": "energy & power applications", "t": "power generation systems", "st": "Series A", "co": "Australia", "d": "Provider of an offgrid hydrogen production and storage system for remote power applications"}, {"q": "2023/Q2", "y": "2023", "c": "Oort Energy", "a": 6223000, "s": "production", "t": "electrolysis > pem", "st": "Seed", "co": "United Kingdom", "d": "Manufacturer of green hydrogen systems using PEM electrolyzers for energy storage and clean fuel"}, {"q": "2023/Q2", "y": "2023", "c": "Newtrace", "a": 5650000, "s": "production", "t": "electrolysis", "st": "Series A", "co": "India", "d": "Developer of membrane-less electrolyzers for hydrogen production"}, {"q": "2023/Q2", "y": "2023", "c": "Dynelectro", "a": 4800000, "s": "production", "t": "electrolysis > solid oxide > electrode-supported", "st": "Seed", "co": "Denmark", "d": "Manufacturer Dynamic Electrolyser Units (DEUs) which produce green hydrogen for carbon-neutral eFuels"}, {"q": "2023/Q2", "y": "2023", "c": "Carbon 280", "a": 4105890, "s": "storage", "t": "material hydrogen carriers", "st": "Seed", "co": "Australia", "d": "Provider of hyrilyte Hydrogen Storage System that stores hydrogen in a safe non-toxic solution using metal hydride dust suspended in mineral oil without the need of expensive catalysts"}, {"q": "2023/Q2", "y": "2023", "c": "Plagazi", "a": 1930000, "s": "production", "t": "biomass / waste", "st": "Series A", "co": "Sweden", "d": "Provider of plasma gasification technology for transforming unsorted waste into hydrogen, synthesis gas and other valuable energy carrier"}, {"q": "2023/Q2", "y": "2023", "c": "HydGene Renewables", "a": 1717740, "s": "production", "t": "biomass / waste", "st": "Seed", "co": "Australia", "d": "Provider of hydrogen production using bioengineered microorganisms using biomass"}, {"q": "2023/Q2", "y": "2023", "c": "Watermeln", "a": 1615000, "s": "energy & power applications", "t": "power generation systems", "st": "Seed", "co": "Netherlands", "d": "Developer of a mobile green hydrogen generator"}, {"q": "2023/Q2", "y": "2023", "c": "SunGreenH2", "a": 1500000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Singapore", "d": "Developer of a nano-engineering platform for high performance catalyst coated electrodes and porous transport layers for all electrolysers"}, {"q": "2023/Q2", "y": "2023", "c": "Oreqa Hydrogen Technologies", "a": 1000000, "s": "storage", "t": "storage", "st": "Seed", "co": "United States", "d": "Developer of hydrogen storage systems with long sustainability and micro-grid capability"}, {"q": "2023/Q2", "y": "2023", "c": "Skyre", "a": 0, "s": "production", "t": "production", "st": "Series B", "co": "United States", "d": "Developer of products that recycle hydrogen and upcycle carbon dioxide"}, {"q": "2023/Q2", "y": "2023", "c": "Hydrexia", "a": 0, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "China", "d": "Developer of hydrogen storage systems"}, {"q": "2023/Q2", "y": "2023", "c": "Hylium Industries", "a": 0, "s": "storage", "t": "storage", "st": "Seed", "co": "Korea Republic", "d": "Developer of liquid hydrogen drone power pack & mobile hydrogen refueling station for fuel cell vehicles"}, {"q": "2023/Q2", "y": "2023", "c": "Arculus Solutions", "a": 0, "s": "distribution", "t": "pipelines", "st": "Seed", "co": "United States", "d": "Developer of hydrogen-barrier coatings for metal pipelines, storage tanks, and EVs to prevent embrittlement"}, {"q": "2023/Q2", "y": "2023", "c": "Ambient Fuels", "a": 0, "s": "production", "t": "production", "st": "Growth Equity", "co": "United States", "d": "Developer of green hydrogen"}, {"q": "2023/Q2", "y": "2023", "c": "HCycle", "a": 0, "s": "production", "t": "biomass / waste", "st": "Series A", "co": "United States", "d": "Provider of waste gasification technology to produce hydrogen"}, {"q": "2023/Q1", "y": "2023", "c": "Amogy", "a": 139000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series B", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2023/Q1", "y": "2023", "c": "Sunshine Hydrogen", "a": 92956644, "s": "production", "t": "electrolysis", "st": "Series A", "co": "China", "d": "Manufacturer and producer of  PWM hydrogen production power"}, {"q": "2023/Q1", "y": "2023", "c": "GeoPura", "a": 43184160, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United Kingdom", "d": "Provider of green hydrogen power solutions for off the grid and back up power with modular units called Hydrogen Power Units (HPU) that customers can rent and purchase hydrogen fuel to power the units"}, {"q": "2023/Q1", "y": "2023", "c": "ClearFlame Engine Technologies", "a": 30000000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series B", "co": "United States", "d": "Developer of clean combustion engine technology that uses decarbonized liquid fuels"}, {"q": "2023/Q1", "y": "2023", "c": "Atawey", "a": 27500000, "s": "production", "t": "production", "st": "Growth Equity", "co": "France", "d": "Designer and manufacturer of autonomous energy solutions for isolated sites"}, {"q": "2023/Q1", "y": "2023", "c": "Hystar", "a": 26000000, "s": "production", "t": "electrolysis > pem", "st": "Series B", "co": "Norway", "d": "Developer of PEM electrolyzers for large scale green hydrogen production"}, {"q": "2023/Q1", "y": "2023", "c": "AquaHydrex", "a": 25082759, "s": "production", "t": "electrolysis > alkaline", "st": "Series B", "co": "United States", "d": "Developer of hydrogen electrolysis"}, {"q": "2023/Q1", "y": "2023", "c": "Home Power Solutions", "a": 23881110, "s": "energy & power applications", "t": "power generation systems", "st": "Series B", "co": "Germany", "d": "Developer of of energy storage systems for home applications"}, {"q": "2023/Q1", "y": "2023", "c": "Fabrum", "a": 23000000, "s": "production", "t": "production", "st": "Series A", "co": "New Zealand", "d": "Provider of cryogenic liquid hydrogen solutions across heavy transport, mining and aviation industries"}, {"q": "2023/Q1", "y": "2023", "c": "HySiLabs", "a": 14202240, "s": "storage", "t": "storage", "st": "Series A", "co": "France", "d": "Developer of a hydrogen liquid vector that can be packaged for small portable power generators as well as for the mobility sector"}, {"q": "2023/Q1", "y": "2023", "c": "Hydrogenera", "a": 2171750, "s": "production", "t": "electrolysis > aem", "st": "Seed", "co": "Bulgaria", "d": "Developer of AEM electrolyzers"}, {"q": "2023/Q1", "y": "2023", "c": "H2 Clipper", "a": 2125000, "s": "distribution", "t": "pipelines", "st": "Seed", "co": "United States", "d": "Developer hydrogen transport systems including proprietary piping, depot storage, and airship delivery"}, {"q": "2023/Q1", "y": "2023", "c": "Electrogenos", "a": 1000000, "s": "production", "t": "electrolysis > alkaline", "st": "Seed", "co": "United Kingdom", "d": "Developer of Alkaline Electrolyser technology to advance green hydorgen production"}, {"q": "2023/Q1", "y": "2023", "c": "Electrogenos", "a": 124651, "s": "production", "t": "electrolysis > alkaline", "st": "Seed", "co": "United Kingdom", "d": "Developer of Alkaline Electrolyser technology to advance green hydorgen production"}, {"q": "2023/Q1", "y": "2023", "c": "NovoHydrogen", "a": 0, "s": "services", "t": "project development", "st": "Seed", "co": "United States", "d": "Provider of hydrogen production and electrolyzer technologies"}, {"q": "2022/Q4", "y": "2022", "c": "Hygenco", "a": 25000000, "s": "services", "t": "project development", "st": "Seed", "co": "India", "d": "Developer of green hydrogen and green ammonia-powered solutions"}, {"q": "2022/Q4", "y": "2022", "c": "Starfire Energy", "a": 24000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series B", "co": "United States", "d": "Developer of modular chemical plants including clean ammonia for energy storage and fuel"}, {"q": "2022/Q4", "y": "2022", "c": "Encore Energy", "a": 17167161, "s": "production", "t": "production", "st": "Growth Equity", "co": "United States", "d": "Producer of oil and natural gas in Texas, Oklahoma and the Eastern US"}, {"q": "2022/Q4", "y": "2022", "c": "Levidian Nanosystems", "a": 13600000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "United Kingdom", "d": "Developer of technology to strip carbon from gas flows leveraging hydrogen and graphene"}, {"q": "2022/Q4", "y": "2022", "c": "Nuionic", "a": 3000000, "s": "production", "t": "production", "st": "Seed", "co": "Canada", "d": "Developer of Microwave Catalytic Reformers to convert gas to hydrogen"}, {"q": "2022/Q4", "y": "2022", "c": "Molten Industries", "a": 2500000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "United States", "d": "Provider of methane pyrolysis technology to generate zero carbon hydrogen"}, {"q": "2022/Q4", "y": "2022", "c": "RIFT", "a": 2300000, "s": "storage", "t": "material hydrogen carriers", "st": "Seed", "co": "Netherlands", "d": "Provider of hydrogen energy storage in iron powder that does not require hydrogenation"}, {"q": "2022/Q4", "y": "2022", "c": "1s1 Energy", "a": 2200000, "s": "production", "t": "electrolysis > pem", "st": "Seed", "co": "United States", "d": "Manufacturer of proprietary PEM water electrolysis systems"}, {"q": "2022/Q4", "y": "2022", "c": "Steelhead Composites", "a": 1919692, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2022/Q4", "y": "2022", "c": "Zahlerfreunde", "a": 0, "s": "processing", "t": "control & metering", "st": "Seed", "co": "Germany", "d": "Provider of smart metering technologies"}, {"q": "2022/Q3", "y": "2022", "c": "Monolith", "a": 300000000, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United States", "d": "Developer of a plasma pyrolysis technology that transforms natural gas into turquoise hydrogen and produces carbon black"}, {"q": "2022/Q3", "y": "2022", "c": "Hysata", "a": 30000000, "s": "production", "t": "electrolysis > capillary-fed", "st": "Series A", "co": "Australia", "d": "Developer of capillary-fed hydrogen electrolyser, producing green hydrogen for steel, transport and chemical sectors"}, {"q": "2022/Q3", "y": "2022", "c": "Utility Global", "a": 25000000, "s": "production", "t": "production", "st": "Series B", "co": "United States", "d": "Developer of a solid oxide electrochemical reactor to deliver blue hydrogen 30% cheaper and with 30% lower emissions than steam methane reforming"}, {"q": "2022/Q3", "y": "2022", "c": "ZEG Power", "a": 18701800, "s": "production", "t": "production", "st": "Series B", "co": "Norway", "d": "Developer of technology for high-efficiency energy production from various hydrocarbons, with an integrated CO2 capture process"}, {"q": "2022/Q3", "y": "2022", "c": "Aurora Hydrogen", "a": 10000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Provider of hydrogen production technology which uses microwave energy to heat menthane"}, {"q": "2022/Q3", "y": "2022", "c": "Zero Emission Industries", "a": 8750000, "s": "storage", "t": "storage", "st": "Series A", "co": "United States", "d": "Provider of hydrogen solutions for the maritime industry"}, {"q": "2022/Q3", "y": "2022", "c": "Marvel Tech", "a": 7300000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series A", "co": "China", "d": "Developer of hydrogen-based power generation technology and products"}, {"q": "2022/Q3", "y": "2022", "c": "SunGreenH2", "a": 2000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "Singapore", "d": "Developer of a nano-engineering platform for high performance catalyst coated electrodes and porous transport layers for all electrolysers"}, {"q": "2022/Q3", "y": "2022", "c": "Hgen", "a": 2000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Producer of modular electrolyzers for hydrogen production"}, {"q": "2022/Q3", "y": "2022", "c": "H2 Clipper", "a": 1125000, "s": "distribution", "t": "pipelines", "st": "Seed", "co": "United States", "d": "Developer hydrogen transport systems including proprietary piping, depot storage, and airship delivery"}, {"q": "2022/Q3", "y": "2022", "c": "17Cicada", "a": 270608, "s": "production", "t": "production", "st": "Seed", "co": "United Kingdom", "d": "Generator of hydrogen and energy materials using biochemical process and microbial synthesis of cyanobacteria"}, {"q": "2022/Q3", "y": "2022", "c": "17Cicada", "a": 144936, "s": "production", "t": "production", "st": "Seed", "co": "United Kingdom", "d": "Generator of hydrogen and energy materials using biochemical process and microbial synthesis of cyanobacteria"}, {"q": "2022/Q3", "y": "2022", "c": "Power to Hydrogen (P2H2)", "a": 100000, "s": "production", "t": "electrolysis > multi-stage", "st": "Seed", "co": "United States", "d": "Provider of Anion Exchange Membrane technologies to produce hydrogen"}, {"q": "2022/Q3", "y": "2022", "c": "Hydrogen Optimized", "a": 0, "s": "production", "t": "electrolysis > alkaline", "st": "Series A", "co": "Canada", "d": "Provider of the hydrogen engineering, procurement and construction services"}, {"q": "2022/Q3", "y": "2022", "c": "Aurora Hydrogen", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "Canada", "d": "Provider of hydrogen production technology which uses microwave energy to heat menthane"}, {"q": "2022/Q3", "y": "2022", "c": "Sunfire", "a": 0, "s": "production", "t": "electrolysis > solid oxide", "st": "Growth Equity", "co": "Germany", "d": "Provider of energy conversion technologies, including solid oxide fuel cells and renewable synthetic fuels based on solid oxide electrolyzers"}, {"q": "2022/Q2", "y": "2022", "c": "Electric Hydrogen", "a": 198000000, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "United States", "d": "Provider of a novel electrolysis-based hydrogen production technology for industrial-scale applications"}, {"q": "2022/Q2", "y": "2022", "c": "Storegga Geotechnologies", "a": 62570000, "s": "production", "t": "electrolysis", "st": "Growth Equity", "co": "United Kingdom", "d": "Developer of carbon capture and hydrogen technology"}, {"q": "2022/Q2", "y": "2022", "c": "Protium Green Solutions", "a": 48685455, "s": "distribution", "t": "distribution", "st": "Series A", "co": "United Kingdom", "d": "Developer of hydrogen and fuel cell projects in the UK"}, {"q": "2022/Q2", "y": "2022", "c": "Sinoscience Fullcryo", "a": 46590000, "s": "distribution", "t": "distribution", "st": "Series B", "co": "China", "d": "Developer of large-scale cryogenic solutions and products for distribution and storage of hydrogen and helium"}, {"q": "2022/Q2", "y": "2022", "c": "Amogy", "a": 46000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series A", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2022/Q2", "y": "2022", "c": "Ohmium", "a": 45000000, "s": "production", "t": "electrolysis > pem", "st": "Series B", "co": "United States", "d": "Developer of PEM electrolyzers"}, {"q": "2022/Q2", "y": "2022", "c": "C-Zero", "a": 34000000, "s": "production", "t": "methane pyrolysis", "st": "Series B", "co": "United States", "d": "Methane pyrolysis technology to break down methane into hydrogen and solid carbon"}, {"q": "2022/Q2", "y": "2022", "c": "Elcogen", "a": 25232160, "s": "production", "t": "electrolysis > solid oxide > electrolyte-supported", "st": "Growth Equity", "co": "Estonia", "d": "Manufacturer and developer of anode-supported Intermediate Temperature Solid Oxide Fuel Cells"}, {"q": "2022/Q2", "y": "2022", "c": "Verdagy", "a": 18999965, "s": "production", "t": "electrolysis > aem", "st": "Series A", "co": "United States", "d": "Developer of a electrochemical cell for green hydrogen production"}, {"q": "2022/Q2", "y": "2022", "c": "Utility Global", "a": 18127140, "s": "production", "t": "production", "st": "Series A", "co": "United States", "d": "Developer of a solid oxide electrochemical reactor to deliver blue hydrogen 30% cheaper and with 30% lower emissions than steam methane reforming"}, {"q": "2022/Q2", "y": "2022", "c": "Hydrogen Mem-Tech", "a": 17270000, "s": "production", "t": "production", "st": "Series A", "co": "Norway", "d": "Developers of hydrogen separation technology with carbon capture"}, {"q": "2022/Q2", "y": "2022", "c": "Xinyan Hydrogen Energy", "a": 14927820, "s": "storage", "t": "storage", "st": "Seed", "co": "China", "d": "Developer of hydrogen fuel cells, new energy materials, hydrogen energy and storage technologies"}, {"q": "2022/Q2", "y": "2022", "c": "Versogen", "a": 14500000, "s": "production", "t": "electrolysis > aem", "st": "Series A", "co": "United States", "d": "Developer of anion exchange membrane electrolyzers"}, {"q": "2022/Q2", "y": "2022", "c": "H2SITE", "a": 13000000, "s": "production", "t": "production", "st": "Series A", "co": "Spain", "d": "Provider of membrane-based liquid reforming systems for ammonia and methanol cracking"}, {"q": "2022/Q2", "y": "2022", "c": "HH2E", "a": 12500000, "s": "production", "t": "production", "st": "Growth Equity", "co": "Germany", "d": "Developers of carbon neutral power plants that provide stable electricity and green hydrogen"}, {"q": "2022/Q2", "y": "2022", "c": "Lhyfe", "a": 10800000, "s": "production", "t": "production", "st": "Growth Equity", "co": "France", "d": "Developer of turnkey solution for the production of green, modular and rapidly deployable hydrogen for mobility and industry"}, {"q": "2022/Q2", "y": "2022", "c": "SYLFEN", "a": 10500000, "s": "energy & power applications", "t": "power generation systems", "st": "Seed", "co": "France", "d": "Turnkey system for a hydrogen production, li-ion, and hydrogen storage system for building heat and electricity management"}, {"q": "2022/Q2", "y": "2022", "c": "Starfire Energy", "a": 7062500, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series A", "co": "United States", "d": "Developer of modular chemical plants including clean ammonia for energy storage and fuel"}, {"q": "2022/Q2", "y": "2022", "c": "Steelhead Composites", "a": 5000000, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2022/Q2", "y": "2022", "c": "Advanced Ionics", "a": 4200000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Developer of symbiotic electrolyzers that can utilize waste heat sources for industrial use"}, {"q": "2022/Q2", "y": "2022", "c": "Newtrace", "a": 1000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "India", "d": "Developer of membrane-less electrolyzers for hydrogen production"}, {"q": "2022/Q2", "y": "2022", "c": "Cyrus", "a": 210282, "s": "processing", "t": "compression", "st": "Seed", "co": "Greece", "d": "Provider of Hydrogen Compressors based on Metal Hydrides"}, {"q": "2022/Q2", "y": "2022", "c": "Clean Power", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "United Kingdom", "d": "Provider of patented hydrogen fuel cell technology"}, {"q": "2022/Q2", "y": "2022", "c": "Advanced Ionics", "a": 0, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Developer of symbiotic electrolyzers that can utilize waste heat sources for industrial use"}, {"q": "2022/Q2", "y": "2022", "c": "pHYnix", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "Spain", "d": "Producer of green hydrogen"}, {"q": "2022/Q2", "y": "2022", "c": "CibusCell", "a": 0, "s": "services", "t": "services", "st": "Seed", "co": "Germany", "d": "Provider of SaaS solutions to help hydrogen producers scale using machine learning operations via monitoring, validation and governance of learning models"}, {"q": "2022/Q2", "y": "2022", "c": "Verne", "a": 0, "s": "storage", "t": "storage", "st": "Seed", "co": "United States", "d": "Developer of green hydrogen storage solutions for decarbonization in the transport sector"}, {"q": "2022/Q1", "y": "2022", "c": "Hy2gen", "a": 226550000, "s": "production", "t": "production", "st": "Growth Equity", "co": "Germany", "d": "Producer of green hydrogen"}, {"q": "2022/Q1", "y": "2022", "c": "Sunfire", "a": 90000000, "s": "production", "t": "electrolysis > solid oxide", "st": "Growth Equity", "co": "Germany", "d": "Provider of energy conversion technologies, including solid oxide fuel cells and renewable synthetic fuels based on solid oxide electrolyzers"}, {"q": "2022/Q1", "y": "2022", "c": "H2Pro", "a": 75000000, "s": "production", "t": "electrolysis > multi-stage", "st": "Series B", "co": "Israel", "d": "Developer of Electrochemical-Thermally Activated Chemical hydrogen production technology (ETAC)"}, {"q": "2022/Q1", "y": "2022", "c": "H2Scan", "a": 70000000, "s": "processing", "t": "control & metering", "st": "Growth Equity", "co": "United States", "d": "Provider of hydrogen-specific leak detection and real-time process monitoring systems"}, {"q": "2022/Q1", "y": "2022", "c": "Ekona Power", "a": 62000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Developer of a production process for industrial scale hydrogen, clean power and pure CO2"}, {"q": "2022/Q1", "y": "2022", "c": "Electrochaea", "a": 40880000, "s": "energy & power applications", "t": "energy molecules", "st": "Growth Equity", "co": "Germany", "d": "Developer of a power-to-gas energy storage technology that converts excess electricity from wind and solar into renewable gas (SNG)"}, {"q": "2022/Q1", "y": "2022", "c": "Modern Hydrogen", "a": 30000000, "s": "production", "t": "methane pyrolysis", "st": "Series B", "co": "United States", "d": "Developer of thermionic energy converters to produce electricity with heat from any fuel source, including natural gas, biogas and green hydrogen"}, {"q": "2022/Q1", "y": "2022", "c": "Verdagy", "a": 25000000, "s": "production", "t": "electrolysis > aem", "st": "Series A", "co": "United States", "d": "Developer of a electrochemical cell for green hydrogen production"}, {"q": "2022/Q1", "y": "2022", "c": "ReCarbon", "a": 25000000, "s": "production", "t": "biomass / waste", "st": "Series B", "co": "United States", "d": "Developer of CCUS technology converting CO2 and Methane into Hydrogen and Syngas"}, {"q": "2022/Q1", "y": "2022", "c": "Lhyfe", "a": 19410000, "s": "production", "t": "production", "st": "Growth Equity", "co": "France", "d": "Developer of turnkey solution for the production of green, modular and rapidly deployable hydrogen for mobility and industry"}, {"q": "2022/Q1", "y": "2022", "c": "Calicat", "a": 11000000, "s": "production", "t": "electrolysis > pem", "st": "Series A", "co": "United States", "d": "Developer of iridium-free PEM electrolyzers"}, {"q": "2022/Q1", "y": "2022", "c": "EH Group Engineering", "a": 5471310, "s": "energy & power applications", "t": "power generation systems", "st": "Series A", "co": "Switzerland", "d": "Developer of lightweight, compact & cheap fuel cells"}, {"q": "2022/Q1", "y": "2022", "c": "Gen2 Energy", "a": 4000000, "s": "services", "t": "independent hydrogen producer (ipp) / turnkey", "st": "Seed", "co": "Norway", "d": "Producer and distributor of green hydrogen"}, {"q": "2022/Q1", "y": "2022", "c": "Supercritical Solutions", "a": 3600000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United Kingdom", "d": "Developer of an electrolyser that uses heat and pressure for a step change in efficiency, producing hydrogen with zero emissions"}, {"q": "2022/Q1", "y": "2022", "c": "Hycamite TCD Technologies", "a": 3000000, "s": "production", "t": "methane pyrolysis", "st": "Seed", "co": "Finland", "d": "Provider of a low-carbon hydrogen production technology, decomposing methane and capturing carbon in a solid"}, {"q": "2022/Q1", "y": "2022", "c": "Ekona Power", "a": 2000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Developer of a production process for industrial scale hydrogen, clean power and pure CO2"}, {"q": "2022/Q1", "y": "2022", "c": "SoHHytec", "a": 2000000, "s": "production", "t": "production", "st": "Seed", "co": "Switzerland", "d": "Developer of concentrated integrated-photoelectrochemical hydrogen production solutions"}, {"q": "2022/Q1", "y": "2022", "c": "HyFuels", "a": 1900000, "s": "production", "t": "production", "st": "Seed", "co": "United Kingdom", "d": "Developer of hydrogen production and infrastructure technologies"}, {"q": "2022/Q1", "y": "2022", "c": "Phoenix Hydrogen", "a": 500000, "s": "services", "t": "services", "st": "Seed", "co": "United States", "d": "Developers of commodity marketplace for hydrogen"}, {"q": "2022/Q1", "y": "2022", "c": "Monarch Energy", "a": 0, "s": "services", "t": "project development", "st": "Seed", "co": "United States", "d": "Developer of green hydrogen projects"}, {"q": "2022/Q1", "y": "2022", "c": "Haffner Energy", "a": 0, "s": "production", "t": "production", "st": "Series A", "co": "France", "d": "Producer of renewable hydrogen by burning wood residues out of oxygen"}, {"q": "2022/Q1", "y": "2022", "c": "HypTec", "a": 0, "s": "energy & power applications", "t": "energy & power applications", "st": "Growth Equity", "co": "Austria", "d": "Developer of hydrogen propulsion technology for mobility applications"}, {"q": "2022/Q1", "y": "2022", "c": "Transitus Energy", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "United Kingdom", "d": "Developers of energy transition technologies using repurposed existing gas infrastructure for the production of hydrogen"}, {"q": "2022/Q1", "y": "2022", "c": "HiiROC", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Series B", "co": "United Kingdom", "d": "Developer of a transformative, low-cost, zero-emission hydrogen production system"}, {"q": "2022/Q1", "y": "2022", "c": "InterContinental Energy", "a": 0, "s": "services", "t": "project development", "st": "Growth Equity", "co": "China", "d": "Developer of large scale renewable energy projects, including green hydrogen and green fuel production facilities"}, {"q": "2022/Q1", "y": "2022", "c": "Shanghai Sunwise New Energy Systems", "a": 0, "s": "distribution", "t": "refuelling", "st": "Growth Equity", "co": "China", "d": "Developer of hydrogen supply chain equipment and refueling infrastructure"}, {"q": "2021/Q4", "y": "2021", "c": "Weishi Energy", "a": 141598485, "s": "other", "t": "", "st": "Series A", "co": "China", "d": "Developers and producers of hydrogen fuel cell products"}, {"q": "2021/Q4", "y": "2021", "c": "Sunfire", "a": 125000000, "s": "production", "t": "electrolysis > solid oxide", "st": "Growth Equity", "co": "Germany", "d": "Provider of energy conversion technologies, including solid oxide fuel cells and renewable synthetic fuels based on solid oxide electrolyzers"}, {"q": "2021/Q4", "y": "2021", "c": "FirstElement Fuel", "a": 105000000, "s": "distribution", "t": "refuelling", "st": "Growth Equity", "co": "United States", "d": "Manufacturer of fuel cell and liquid fuel reformer technology, as well as the True Zero H2 charging infrastructure network"}, {"q": "2021/Q4", "y": "2021", "c": "Lhyfe", "a": 58000000, "s": "production", "t": "production", "st": "Series A", "co": "France", "d": "Developer of turnkey solution for the production of green, modular and rapidly deployable hydrogen for mobility and industry"}, {"q": "2021/Q4", "y": "2021", "c": "HiiROC", "a": 34700000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "United Kingdom", "d": "Developer of a transformative, low-cost, zero-emission hydrogen production system"}, {"q": "2021/Q4", "y": "2021", "c": "Modern Hydrogen", "a": 30000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "United States", "d": "Developer of thermionic energy converters to produce electricity with heat from any fuel source, including natural gas, biogas and green hydrogen"}, {"q": "2021/Q4", "y": "2021", "c": "Amogy", "a": 20000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series A", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2021/Q4", "y": "2021", "c": "ClearFlame Engine Technologies", "a": 17000000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Series A", "co": "United States", "d": "Developer of clean combustion engine technology that uses decarbonized liquid fuels"}, {"q": "2021/Q4", "y": "2021", "c": "NanoSUN", "a": 14900000, "s": "distribution", "t": "refuelling", "st": "Series A", "co": "United Kingdom", "d": "Developer of a hydrogen refueler, with the potential to eliminate 80 to 90% of the cost of conventional hydrogen refueling"}, {"q": "2021/Q4", "y": "2021", "c": "Advanced Ionics", "a": 3000000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Developer of symbiotic electrolyzers that can utilize waste heat sources for industrial use"}, {"q": "2021/Q4", "y": "2021", "c": "dCarbonX", "a": 2633410, "s": "storage", "t": "storage", "st": "Seed", "co": "United Kingdom", "d": "Developer of subsurface hydrogen storage and carbon sequestration assets"}, {"q": "2021/Q4", "y": "2021", "c": "Hydrova", "a": 0, "s": "production", "t": "biomass / waste", "st": "Seed", "co": "United States", "d": "Developers of chemical process which repurposes industrial waste while producing green hydrogen"}, {"q": "2021/Q4", "y": "2021", "c": "Ekona Power", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Developer of a production process for industrial scale hydrogen, clean power and pure CO2"}, {"q": "2021/Q4", "y": "2021", "c": "Kaizen Clean Energy", "a": 0, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Seed", "co": "United States", "d": "Designer, developer and manufacturer of hydrogen generators for distributed power generation and hydrogen production"}, {"q": "2021/Q4", "y": "2021", "c": "Ekona Power", "a": 0, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Developer of a production process for industrial scale hydrogen, clean power and pure CO2"}, {"q": "2021/Q4", "y": "2021", "c": "Sunborne Systems", "a": 0, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "United Kingdom", "d": "Provider of ammonia based power using reactor technologies"}, {"q": "2021/Q3", "y": "2021", "c": "Hydrogenious LOHC Technologies", "a": 59000000, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "Germany", "d": "Developer of hydrogen storage in the form of 'Liquid Organic Hydrogen Carriers' for multi-megawatt energy systems"}, {"q": "2021/Q3", "y": "2021", "c": "Calicat", "a": 7000000, "s": "production", "t": "electrolysis > pem", "st": "Series A", "co": "United States", "d": "Developer of iridium-free PEM electrolyzers"}, {"q": "2021/Q3", "y": "2021", "c": "Steelhead Composites", "a": 5000000, "s": "storage", "t": "storage", "st": "Growth Equity", "co": "United States", "d": "Provider of pressure vessels and hydrogen storage options for certified zero-emission fuel cell applications"}, {"q": "2021/Q3", "y": "2021", "c": "IC Technology", "a": 3500000, "s": "storage", "t": "tank / tube (gas / liquid)", "st": "Seed", "co": "Norway", "d": "Provider of storage and distribution solutions for liquid hydrogen solutions"}, {"q": "2021/Q3", "y": "2021", "c": "thiozen", "a": 3000000, "s": "production", "t": "by-product", "st": "Seed", "co": "United States", "d": "Developer of a process to generate low carbon hydrogen from oil refinery waste gas"}, {"q": "2021/Q3", "y": "2021", "c": "Innova Hydrogen", "a": 55000, "s": "production", "t": "production", "st": "Seed", "co": "Canada", "d": "Provider of technology for hydrogen and graphene production"}, {"q": "2021/Q3", "y": "2021", "c": "Electric Hydrogen", "a": 0, "s": "production", "t": "electrolysis > pem", "st": "Growth Equity", "co": "United States", "d": "Provider of a novel electrolysis-based hydrogen production technology for industrial-scale applications"}, {"q": "2021/Q3", "y": "2021", "c": "Verdagy", "a": 0, "s": "production", "t": "electrolysis > aem", "st": "Seed", "co": "United States", "d": "Developer of a electrochemical cell for green hydrogen production"}, {"q": "2021/Q2", "y": "2021", "c": "Monolith", "a": 100000000, "s": "production", "t": "methane pyrolysis", "st": "Growth Equity", "co": "United States", "d": "Developer of a plasma pyrolysis technology that transforms natural gas into turquoise hydrogen and produces carbon black"}, {"q": "2021/Q2", "y": "2021", "c": "Corre Energy", "a": 24340000, "s": "storage", "t": "large-scale", "st": "Seed", "co": "Netherlands", "d": "Provider of large-scale underground hydrogen storage solutions"}, {"q": "2021/Q2", "y": "2021", "c": "Electric Hydrogen", "a": 24000000, "s": "production", "t": "electrolysis > pem", "st": "Series A", "co": "United States", "d": "Provider of a novel electrolysis-based hydrogen production technology for industrial-scale applications"}, {"q": "2021/Q2", "y": "2021", "c": "Hysata", "a": 5000000, "s": "production", "t": "electrolysis > capillary-fed", "st": "Seed", "co": "Australia", "d": "Developer of capillary-fed hydrogen electrolyser, producing green hydrogen for steel, transport and chemical sectors"}, {"q": "2021/Q2", "y": "2021", "c": "Endua", "a": 5000000, "s": "energy & power applications", "t": "power generation systems", "st": "Seed", "co": "Australia", "d": "Provider of an offgrid hydrogen production and storage system for remote power applications"}, {"q": "2021/Q2", "y": "2021", "c": "ClearFlame Engine Technologies", "a": 2500000, "s": "energy & power applications", "t": "hydrogen combustion", "st": "Seed", "co": "United States", "d": "Developer of clean combustion engine technology that uses decarbonized liquid fuels"}, {"q": "2021/Q2", "y": "2021", "c": "P2X Solutions", "a": 2429298, "s": "services", "t": "project development", "st": "Seed", "co": "Finland", "d": "Producer of green hydrogen and developer of power-to-X technology"}, {"q": "2021/Q2", "y": "2021", "c": "Proton Technologies", "a": 38700, "s": "production", "t": "production", "st": "Seed", "co": "Canada", "d": "Provider of large-scale hydrogen production solutions, converting hydrocarbon reservoirs into hydrogen mines and thermal generators"}, {"q": "2021/Q2", "y": "2021", "c": "Evolve Hydrogen", "a": 30000, "s": "production", "t": "electrolysis", "st": "Seed", "co": "United States", "d": "Provider of hydrogen prodution technology using electro-conductive polymers featuring carbon nanotechnologies, which can use any water source"}, {"q": "2021/Q2", "y": "2021", "c": "Proteum Energy", "a": 30000, "s": "production", "t": "steam methane reforming (smr)", "st": "Seed", "co": "United States", "d": "Provider of steam non-methane reforming technology for low-carbon hydrogen production"}, {"q": "2021/Q2", "y": "2021", "c": "Electrochaea", "a": 0, "s": "energy & power applications", "t": "energy molecules", "st": "Growth Equity", "co": "Germany", "d": "Developer of a power-to-gas energy storage technology that converts excess electricity from wind and solar into renewable gas (SNG)"}, {"q": "2021/Q2", "y": "2021", "c": "Amogy", "a": 0, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2021/Q2", "y": "2021", "c": "Gen2 Energy", "a": 0, "s": "services", "t": "independent hydrogen producer (ipp) / turnkey", "st": "Seed", "co": "Norway", "d": "Producer and distributor of green hydrogen"}, {"q": "2021/Q2", "y": "2021", "c": "Starfire Energy", "a": 0, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Series A", "co": "United States", "d": "Developer of modular chemical plants including clean ammonia for energy storage and fuel"}, {"q": "2021/Q1", "y": "2021", "c": "BayoTech", "a": 157000000, "s": "production", "t": "steam methane reforming (smr)", "st": "Growth Equity", "co": "United States", "d": "Provider of on-site hydrogen production solutions using gas-as-a-service"}, {"q": "2021/Q1", "y": "2021", "c": "H2Pro", "a": 22000000, "s": "production", "t": "electrolysis > multi-stage", "st": "Series B", "co": "Israel", "d": "Developer of Electrochemical-Thermally Activated Chemical hydrogen production technology (ETAC)"}, {"q": "2021/Q1", "y": "2021", "c": "Horisont Energi", "a": 17600000, "s": "production", "t": "production", "st": "Seed", "co": "Norway", "d": "Developer of blue hydrogen, blue ammonia, and carbon storage solutions"}, {"q": "2021/Q1", "y": "2021", "c": "C-Zero", "a": 11500000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "United States", "d": "Methane pyrolysis technology to break down methane into hydrogen and solid carbon"}, {"q": "2021/Q1", "y": "2021", "c": "Hystar", "a": 6000000, "s": "production", "t": "electrolysis > pem", "st": "Seed", "co": "Norway", "d": "Developer of PEM electrolyzers for large scale green hydrogen production"}, {"q": "2021/Q1", "y": "2021", "c": "Home Power Solutions", "a": 3501005, "s": "energy & power applications", "t": "power generation systems", "st": "Series A", "co": "Germany", "d": "Developer of of energy storage systems for home applications"}, {"q": "2021/Q1", "y": "2021", "c": "Amogy", "a": 3100000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2021/Q1", "y": "2021", "c": "Utility Global", "a": 3000000, "s": "production", "t": "production", "st": "Series A", "co": "United States", "d": "Developer of a solid oxide electrochemical reactor to deliver blue hydrogen 30% cheaper and with 30% lower emissions than steam methane reforming"}, {"q": "2021/Q1", "y": "2021", "c": "Ekona Power", "a": 3000000, "s": "production", "t": "methane pyrolysis", "st": "Series A", "co": "Canada", "d": "Developer of a production process for industrial scale hydrogen, clean power and pure CO2"}, {"q": "2021/Q1", "y": "2021", "c": "Boson Energy", "a": 2412700, "s": "production", "t": "biomass / waste", "st": "Growth Equity", "co": "Luxembourg", "d": "Developer of a clean thermochemical recycling process that turns non-recyclable waste and biomass into local Hydrogen"}, {"q": "2021/Q1", "y": "2021", "c": "Amogy", "a": 1000000, "s": "energy & power applications", "t": "energy molecules > ammonia", "st": "Seed", "co": "United States", "d": "Developer of carbon-free energy storage system using ammonia as fuel"}, {"q": "2021/Q1", "y": "2021", "c": "Proton Technologies", "a": 360000, "s": "production", "t": "production", "st": "Seed", "co": "Canada", "d": "Provider of large-scale hydrogen production solutions, converting hydrocarbon reservoirs into hydrogen mines and thermal generators"}, {"q": "2021/Q1", "y": "2021", "c": "SoHHytec", "a": 162537, "s": "production", "t": "production", "st": "Seed", "co": "Switzerland", "d": "Developer of concentrated integrated-photoelectrochemical hydrogen production solutions"}, {"q": "2021/Q1", "y": "2021", "c": "AquaHydrex", "a": 19591, "s": "production", "t": "electrolysis > alkaline", "st": "Series B", "co": "United States", "d": "Developer of hydrogen electrolysis"}, {"q": "2021/Q1", "y": "2021", "c": "PDC Machines", "a": 0, "s": "distribution", "t": "refuelling", "st": "Seed", "co": "United States", "d": "Provider of diaphragm gas compressors for Alternative Energy/Hydrogen refueling stations"}, {"q": "2021/Q1", "y": "2021", "c": "Element 1", "a": 0, "s": "production", "t": "production", "st": "Growth Equity", "co": "United States", "d": "is a developer of small-scale to micro-scale clean energy technologies, including advanced hydrogen generation systems, flare-gas refinement solutions, and gas-to-liquid processes"}, {"q": "2021/Q1", "y": "2021", "c": "Versogen", "a": 0, "s": "production", "t": "electrolysis > aem", "st": "Seed", "co": "United States", "d": "Developer of anion exchange membrane electrolyzers"}, {"q": "2021/Q1", "y": "2021", "c": "Storegga Geotechnologies", "a": 0, "s": "production", "t": "electrolysis", "st": "Series A", "co": "United Kingdom", "d": "Developer of carbon capture and hydrogen technology"}, {"q": "2021/Q1", "y": "2021", "c": "Ways2H", "a": 0, "s": "production", "t": "biomass / waste", "st": "Series A", "co": "United States", "d": "Producer of renewable hydrogen from waste streams"}, {"q": "2021/Q1", "y": "2021", "c": "OneH2", "a": 0, "s": "distribution", "t": "refuelling", "st": "Seed", "co": "United States", "d": "Supplier of hydrogen fuel and hydrogen infrastructure"}, {"q": "2021/Q1", "y": "2021", "c": "H2V Industry", "a": 0, "s": "production", "t": "production", "st": "Seed", "co": "France", "d": "Producer of hydrogen by water electrolysis using renewable energy"}];    // Sector config
+    const sectorConfig = {
+      'production': { name: 'Production（製造）', icon: '🏭', class: 'production' },
+      'energy & power applications': { name: 'Applications（応用）', icon: '⚡', class: 'applications' },
+      'services': { name: 'Services（サービス）', icon: '🔧', class: 'services' },
+      'distribution': { name: 'Distribution（流通）', icon: '🚚', class: 'distribution' },
+      'storage': { name: 'Storage（貯蔵）', icon: '🔋', class: 'storage' },
+      'processing': { name: 'Processing（加工）', icon: '⚙️', class: 'processing' },
+      'other': { name: 'Other（その他）', icon: '📦', class: 'other' }
+    };
 
-    // CSVの全データ（簡易的に上位を表示するロジックをJSで動かす）
-    function loadTable(data) {
-        const body = document.getElementById('dealTableBody');
-        body.innerHTML = data.map(d => `
-            <tr>
-                <td>${d.date}</td>
-                <td><strong>${d.company}</strong></td>
-                <td class="amount-cell">${d.amount}</td>
-                <td><span class="tag">${d.sector}</span></td>
-                <td style="color:#475569">${d.summary}</td>
-            </tr>
-        `).join('');
+    function formatAmount(amount) {
+      if (amount === 0) return '<span class="deal-amount undisclosed">非公開</span>';
+      if (amount >= 1000000000) return '<span class="deal-amount">$' + (amount/1000000000).toFixed(1) + 'B</span>';
+      if (amount >= 1000000) return '<span class="deal-amount">$' + (amount/1000000).toFixed(1) + 'M</span>';
+      return '<span class="deal-amount">$' + (amount/1000).toFixed(0) + 'K</span>';
     }
-    loadTable(dealsData); // 初期表示
 
-    // 検索機能
-    document.getElementById('dealSearch').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = dealsData.filter(d => 
-            d.company.toLowerCase().includes(term) || 
-            d.sector.toLowerCase().includes(term) || 
-            d.summary.toLowerCase().includes(term)
-        );
-        loadTable(filtered);
-    });
+    function getStageClass(stage) {
+      if (stage === 'Seed') return 'stage-seed';
+      if (stage === 'Series A') return 'stage-a';
+      if (stage === 'Series B') return 'stage-b';
+      if (stage === 'Growth Equity') return 'stage-growth';
+      return '';
+    }
 
-    // --- Tab Logic ---
+    function renderDeals() {
+      const yearFrom = parseInt(document.getElementById('yearFrom').value);
+      const yearTo = parseInt(document.getElementById('yearTo').value);
+      const stageFilter = document.getElementById('stageFilter').value;
+      
+      // Filter deals
+      const filtered = allDeals.filter(d => {
+        const year = parseInt(d.y);
+        if (year < yearFrom || year > yearTo) return false;
+        if (stageFilter && d.st !== stageFilter) return false;
+        return true;
+      });
+      
+      document.getElementById('filterCount').textContent = filtered.length;
+      
+      // Group by sector
+      const bySector = {};
+      filtered.forEach(d => {
+        const s = d.s || 'other';
+        if (!bySector[s]) bySector[s] = { deals: [], total: 0, count: 0 };
+        bySector[s].deals.push(d);
+        bySector[s].total += d.a;
+        bySector[s].count++;
+      });
+      
+      // Sort sectors by total amount
+      const sortedSectors = Object.entries(bySector)
+        .sort((a, b) => b[1].total - a[1].total);
+      
+      let html = '';
+      sortedSectors.forEach(([sector, data]) => {
+        const cfg = sectorConfig[sector] || sectorConfig['other'];
+        const top5 = data.deals.sort((a, b) => b.a - a.a).slice(0, 5);
+        
+        const totalStr = data.total >= 1000000000 
+          ? '$' + (data.total/1000000000).toFixed(1) + 'B'
+          : '$' + Math.round(data.total/1000000) + 'M';
+        
+        html += '<div class="sector-section">';
+        html += '<div class="sector-header ' + cfg.class + '">';
+        html += '<div class="sector-title"><span class="icon">' + cfg.icon + '</span><h3>' + cfg.name + '</h3></div>';
+        html += '<div class="sector-stats">';
+        html += '<div class="stat"><div class="stat-value">' + totalStr + '</div><div class="stat-label">総投資額</div></div>';
+        html += '<div class="stat"><div class="stat-value">' + data.count + '</div><div class="stat-label">ディール数</div></div>';
+        html += '</div></div>';
+        
+        if (top5.length === 0) {
+          html += '<div class="sector-deals empty">該当するディールがありません</div>';
+        } else {
+          html += '<div class="sector-deals">';
+          top5.forEach(deal => {
+            html += '<div class="deal-item">';
+            html += '<div class="deal-main">';
+            html += '<div class="deal-company">' + deal.c + '</div>';
+            html += '<span class="deal-tech">' + (deal.t || deal.s) + '</span>';
+            html += '<div class="deal-desc">' + deal.d + '</div>';
+            html += '</div>';
+            html += formatAmount(deal.a);
+            html += '<div class="deal-meta">';
+            html += '<div class="stage ' + getStageClass(deal.st) + '">' + deal.st + '</div>';
+            html += '<div>' + deal.co + '</div>';
+            html += '<div>' + deal.q + '</div>';
+            html += '</div></div>';
+          });
+          html += '</div>';
+        }
+        html += '</div>';
+      });
+      
+      document.getElementById('dealsContainer').innerHTML = html;
+    }
+    
+    // Event listeners
+    document.getElementById('yearFrom').addEventListener('change', renderDeals);
+    document.getElementById('yearTo').addEventListener('change', renderDeals);
+    document.getElementById('stageFilter').addEventListener('change', renderDeals);
+    
+    // Tab switching
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -188,58 +324,75 @@
         document.getElementById(tab.dataset.tab).classList.add('active');
       });
     });
-
-    // --- Charts ---
+    
+    // Chart defaults
+    Chart.defaults.font.family = "'Noto Sans JP', sans-serif";
+    Chart.defaults.color = '#64748b';
+    
     // Yearly Chart
     new Chart(document.getElementById('yearlyChart'), {
       type: 'bar',
       data: {
         labels: ['2021', '2022', '2023', '2024', '2025*'],
-        datasets: [{ label: '投資額 (M$)', data: [1023, 1848, 1849, 1408, 573], backgroundColor: '#0ea5e9', borderRadius: 6 }]
-      },
-      options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // Sector Pie
-    new Chart(document.getElementById('sectorPieChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Production', 'Applications', 'Services', 'Distribution', 'Storage'],
-        datasets: [{ data: [4954, 513, 415, 335, 245], backgroundColor: ['#0ea5e9', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'] }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-    });
-
-    // Regional Trend Chart (New!)
-    new Chart(document.getElementById('regionalTrendChart'), {
-      type: 'line',
-      data: {
-        labels: ['2021', '2022', '2023', '2024', '2025*'],
         datasets: [
-          { label: '米国', data: [492, 937, 1142, 456, 114], borderColor: '#0ea5e9', tension: 0.3, fill: false },
-          { label: 'ドイツ', data: [187, 369, 28, 234, 75], borderColor: '#6366f1', tension: 0.3, fill: false },
-          { label: '中国', data: [141, 68, 346, 57, 23], borderColor: '#f59e0b', tension: 0.3, fill: false },
-          { label: 'ベルギー', data: [0, 0, 6, 250, 135], borderColor: '#10b981', tension: 0.3, fill: false },
-          { label: 'フランス', data: [58, 40, 43, 126, 67], borderColor: '#ef4444', tension: 0.3, fill: false }
+          { label: '投資額 (M$)', data: [1023, 1849, 1849, 1408, 574], backgroundColor: '#0ea5e9', borderRadius: 6, yAxisID: 'y' },
+          { label: '件数', data: [59, 79, 62, 54, 40], type: 'line', borderColor: '#f59e0b', backgroundColor: '#f59e0b', borderWidth: 3, pointRadius: 5, yAxisID: 'y1' }
         ]
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true, title: { display: true, text: '投資額 (百万ドル)' } } }
-      }
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { position: 'left', title: { display: true, text: '投資額 (M$)' } }, y1: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '件数' } } } }
     });
-
-    // Country Bar
+    
+    // Sector Pie Chart
+    new Chart(document.getElementById('sectorPieChart'), {
+      type: 'doughnut',
+      data: { labels: ['Production', 'Applications', 'Services', 'Distribution', 'Storage'], datasets: [{ data: [4954, 513, 415, 335, 246], backgroundColor: ['#0ea5e9', '#f59e0b', '#ef4444', '#10b981', '#8b5cf6'], borderWidth: 0 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+    });
+    
+    // Stage Chart
+    new Chart(document.getElementById('stageChart'), {
+      type: 'bar',
+      data: { labels: ['2021', '2022', '2023', '2024', '2025*'], datasets: [ { label: 'Seed', data: [29, 32, 24, 23, 16], backgroundColor: '#10b981' }, { label: 'Series A', data: [18, 19, 15, 14, 12], backgroundColor: '#0ea5e9' }, { label: 'Series B', data: [2, 10, 10, 5, 1], backgroundColor: '#8b5cf6' }, { label: 'Growth', data: [10, 18, 13, 12, 11], backgroundColor: '#f59e0b' } ] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { stacked: true }, y: { stacked: true } } }
+    });
+    
+    // Electrolysis Chart
+    new Chart(document.getElementById('electrolysisChart'), {
+      type: 'bar',
+      data: { labels: ['PEM', 'Solid Oxide', 'Alkaline', 'Capillary-fed', 'AEM', 'Multi-stage'], datasets: [{ label: '投資額 (M$)', data: [996, 578, 484, 146, 140, 107], backgroundColor: ['#0ea5e9', '#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe'], borderRadius: 6 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+    
+    // Sector Trend Chart
+    new Chart(document.getElementById('sectorTrendChart'), {
+      type: 'line',
+      data: { labels: ['2021', '2022', '2023', '2024', '2025*'], datasets: [ { label: 'Production', data: [69.5, 68.6, 67.9, 79.7, 83.5], borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.1)', fill: true, tension: 0.3 }, { label: 'Distribution', data: [13.6, 5.6, 6.6, 0.5, 0], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 }, { label: 'Applications', data: [5.9, 8.2, 12.6, 1.5, 5.3], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.3 }, { label: 'Storage', data: [10.7, 1.9, 2.0, 4.6, 4.3], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', fill: true, tension: 0.3 } ] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { title: { display: true, text: '構成比 (%)' } } } }
+    });
+    
+    // Country Chart
     new Chart(document.getElementById('countryChart'), {
       type: 'bar',
-      data: {
-        labels: ['US', 'Germany', 'China', 'Belgium', 'France', 'UK', 'Estonia', 'Australia'],
-        datasets: [{ label: '累計投資額 (M$)', data: [3143, 896, 637, 392, 335, 263, 170, 165], backgroundColor: '#6366f1' }]
-      },
-      options: { responsive: true, maintainAspectRatio: false }
+      data: { labels: ['US', 'Germany', 'China', 'Belgium', 'France', 'UK', 'Estonia', 'Australia'], datasets: [{ label: '投資額 (M$)', data: [3143, 896, 637, 392, 335, 263, 170, 165], backgroundColor: '#6366f1', borderRadius: 6 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
     });
+    
+    // Investor Chart
+    new Chart(document.getElementById('investorChart'), {
+      type: 'bar',
+      data: { labels: ['AP Ventures', 'Breakthrough Energy', 'Mitsubishi HI', 'Temasek', 'Climate Pledge', 'Aramco', 'Baker Hughes', 'Chevron'], datasets: [{ label: '投資件数', data: [21, 17, 10, 9, 8, 7, 7, 6], backgroundColor: '#f59e0b', borderRadius: 6 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+    
+    // Country Yearly Trend Chart
+    new Chart(document.getElementById('countryYearlyChart'), {
+      type: 'line',
+      data: { labels: ['2021', '2022', '2023', '2024', '2025*'], datasets: [ { label: '🇺🇸 United States', data: [492, 856, 1090, 452, 119], borderColor: '#0ea5e9', borderWidth: 3, tension: 0.3, fill: false }, { label: '🇩🇪 Germany', data: [188, 352, 53, 233, 72], borderColor: '#ef4444', borderWidth: 3, tension: 0.3, fill: false }, { label: '🇨🇳 China', data: [142, 186, 178, 61, 22], borderColor: '#f59e0b', borderWidth: 3, tension: 0.3, fill: false }, { label: '🇫🇷 France', data: [58, 27, 50, 126, 63], borderColor: '#8b5cf6', borderWidth: 3, tension: 0.3, fill: false }, { label: '🇬🇧 United Kingdom', data: [52, 148, 32, 13, 18], borderColor: '#10b981', borderWidth: 3, tension: 0.3, fill: false } ] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } } }, scales: { y: { title: { display: true, text: '投資額 (M$)' }, beginAtZero: true } } }
+    });
+    
+    // Initial render
+    renderDeals();
   </script>
 </body>
 </html>
