@@ -145,9 +145,28 @@
     </div>
     
     <div id="sectors" class="tab-content">
-      <div class="charts-grid-half">
-        <div class="chart-card"><h3>電解槽技術タイプ別投資</h3><p class="subtitle">製造技術別の投資額（百万ドル）</p><div class="chart-container"><canvas id="electrolysisChart"></canvas></div></div>
-        <div class="chart-card"><h3>セクター構成比の変化</h3><p class="subtitle">年別の投資配分（%）</p><div class="chart-container"><canvas id="sectorTrendChart"></canvas></div></div>
+      <div class="chart-card" style="margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <h3>電解槽技術タイプ別投資</h3>
+            <p class="subtitle">製造技術別の投資額（百万ドル）</p>
+          </div>
+          <div class="filter-group" style="flex-direction: row; align-items: center; gap: 12px;">
+            <label style="margin: 0;">年フィルター:</label>
+            <div class="year-range">
+              <select id="elecYearFrom"><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option></select>
+              <span>〜</span>
+              <select id="elecYearTo"><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025" selected>2025</option></select>
+            </div>
+            <span id="elecFilterSummary" style="font-size: 13px; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 6px;"></span>
+          </div>
+        </div>
+        <div class="chart-container" style="margin-top: 16px;"><canvas id="electrolysisChart"></canvas></div>
+      </div>
+      <div class="chart-card" style="margin-bottom: 20px;">
+        <h3>セクター構成比の変化</h3>
+        <p class="subtitle">年別の投資配分（%）</p>
+        <div class="chart-container"><canvas id="sectorTrendChart"></canvas></div>
       </div>
       <div class="chart-card"><h3>新興技術の成長</h3><p class="subtitle">2021-22年 vs 2024-25年の投資件数変化</p>
         <div class="growth-grid">
@@ -356,12 +375,87 @@ const allDeals = [{"q": "2025/Q4", "y": "2025", "c": "SPARK Cleantech", "a": 349
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { stacked: true }, y: { stacked: true } } }
     });
     
-    // Electrolysis Chart
-    new Chart(document.getElementById('electrolysisChart'), {
-      type: 'bar',
-      data: { labels: ['PEM', 'Solid Oxide', 'Alkaline', 'Capillary-fed', 'AEM', 'Multi-stage'], datasets: [{ label: '投資額 (M$)', data: [996, 578, 484, 146, 140, 107], backgroundColor: ['#0ea5e9', '#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe'], borderRadius: 6 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+    // Electrolysis Chart - Dynamic
+    const electrolysisDeals = allDeals.filter(d => d.t && d.t.toLowerCase().includes('electrolysis'));
+    
+    function getElectrolysisTech(tech) {
+      const t = tech.toLowerCase();
+      if (t.includes('pem')) return 'PEM';
+      if (t.includes('solid oxide')) return 'Solid Oxide';
+      if (t.includes('alkaline')) return 'Alkaline';
+      if (t.includes('capillary')) return 'Capillary-fed';
+      if (t.includes('aem')) return 'AEM';
+      if (t.includes('multi-stage')) return 'Multi-stage';
+      return 'Other';
+    }
+    
+    let electrolysisChart = null;
+    
+    function updateElectrolysisChart() {
+      const yearFrom = parseInt(document.getElementById('elecYearFrom').value);
+      const yearTo = parseInt(document.getElementById('elecYearTo').value);
+      
+      // Filter and aggregate
+      const byTech = {};
+      let totalDeals = 0;
+      electrolysisDeals.forEach(d => {
+        const year = parseInt(d.y);
+        if (year >= yearFrom && year <= yearTo) {
+          const tech = getElectrolysisTech(d.t);
+          if (!byTech[tech]) byTech[tech] = 0;
+          byTech[tech] += d.a;
+          totalDeals++;
+        }
+      });
+      
+      // Sort by amount
+      const sorted = Object.entries(byTech).sort((a, b) => b[1] - a[1]);
+      const labels = sorted.map(x => x[0]);
+      const data = sorted.map(x => Math.round(x[1] / 1000000));
+      
+      // Update summary
+      const total = data.reduce((a, b) => a + b, 0);
+      document.getElementById('elecFilterSummary').textContent = totalDeals + '件 / $' + total + 'M';
+      
+      const colors = {
+        'PEM': '#0ea5e9', 'Solid Oxide': '#6366f1', 'Alkaline': '#8b5cf6',
+        'Capillary-fed': '#a855f7', 'AEM': '#c084fc', 'Multi-stage': '#d8b4fe', 'Other': '#94a3b8'
+      };
+      
+      if (electrolysisChart) {
+        electrolysisChart.data.labels = labels;
+        electrolysisChart.data.datasets[0].data = data;
+        electrolysisChart.data.datasets[0].backgroundColor = labels.map(l => colors[l] || '#94a3b8');
+        electrolysisChart.update();
+      } else {
+        electrolysisChart = new Chart(document.getElementById('electrolysisChart'), {
+          type: 'bar',
+          data: { 
+            labels: labels, 
+            datasets: [{ 
+              label: '投資額 (M$)', 
+              data: data, 
+              backgroundColor: labels.map(l => colors[l] || '#94a3b8'), 
+              borderRadius: 6 
+            }] 
+          },
+          options: { 
+            indexAxis: 'y', 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } },
+            scales: { x: { title: { display: true, text: '投資額 (M$)' } } }
+          }
+        });
+      }
+    }
+    
+    // Electrolysis filter event listeners
+    document.getElementById('elecYearFrom').addEventListener('change', updateElectrolysisChart);
+    document.getElementById('elecYearTo').addEventListener('change', updateElectrolysisChart);
+    
+    // Initialize electrolysis chart
+    updateElectrolysisChart();
     
     // Sector Trend Chart
     new Chart(document.getElementById('sectorTrendChart'), {
